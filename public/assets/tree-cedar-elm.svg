@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8f3e6"/>
+      <stop offset="1" stop-color="#eaf3ed"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" x2="1">
+      <stop offset="0" stop-color="#c7a25d"/>
+      <stop offset="1" stop-color="#745337"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="560" fill="url(#sky)"/>
+  <path d="M0 430c160-40 270 30 430 0s310-52 470 0v130H0z" fill="url(#ground)" opacity=".78"/>
+  <path d="M450 318v140" stroke="#745337" stroke-width="36" stroke-linecap="round"/>
+  <path d="M450 374c-80-10-130-50-170-118 75 0 137 34 170 118Z" fill="#7d9b5f" opacity=".88"/>
+  <path d="M450 366c90-10 155-57 205-136-88 0-165 41-205 136Z" fill="#7d9b5f" opacity=".78"/>
+  <circle cx="450" cy="220" r="138" fill="#2f6b4f"/>
+  <circle cx="337" cy="250" r="96" fill="#7d9b5f"/>
+  <circle cx="563" cy="250" r="96" fill="#7d9b5f" opacity=".92"/>
+  <circle cx="450" cy="160" r="102" fill="#2f6b4f" opacity=".9"/>
+  <text x="48" y="72" fill="#173b2f" font-family="Arial, sans-serif" font-size="42" font-weight="700">Cedar Elm</text>
+</svg>

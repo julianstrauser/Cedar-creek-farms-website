@@ -1,74 +1,42 @@
-# Cedar Creek Farms Website Starter
+# Cedar Creek Farms Website
 
-This is a complete static website starter for a tree farming company. It includes:
+Next.js website for a tree farm with a public catalog, quote requests, and an **owner-only admin dashboard** powered by Supabase.
 
-- Home page
-- Tree availability page with search and filters
-- Tree transplanting services page
-- Gallery page
-- Quote request/contact page
-- Simple admin helper for turning CSV inventory into JSON
-- Placeholder SVG images that can be replaced with real photos
+## Public site
 
-## How to preview it
+- Home, tree availability, services, gallery, and contact/quote form
+- Inventory and gallery load from Supabase (not hardcoded JSON)
+- Visitors can submit quote requests; they cannot edit content or access admin pages
 
-Open `index.html` in a browser. For best results, use a simple local server:
+## Owner admin
+
+Sign in at **`/admin/login`**, then manage:
+
+- Products (add, edit, delete, availability, images)
+- Gallery photos
+- Incoming orders / quote requests
+
+See **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** for full setup: Supabase project, database migration, storage, env vars, creating the admin user, local dev, and deployment.
+
+## Quick start (developers)
 
 ```bash
-python3 -m http.server 8080
+cp .env.example .env.local
+# Fill in Supabase URL and keys (see SUPABASE_SETUP.md)
+
+npm install
+npm run dev
 ```
 
-Then open:
+- Site: http://localhost:3000
+- Admin: http://localhost:3000/admin/login
 
-```text
-http://localhost:8080
-```
+## Deploy
 
-## What to customize first
+Recommended: **Vercel** with the Supabase environment variables from `.env.example`.
 
-1. Replace the company name if it is not Cedar Creek Farms.
-2. Replace the phone number and email in `contact.html`.
-3. Replace the service area text in `contact.html` and the homepage schema.
-4. Replace placeholder photos in the `assets` folder.
-5. Update inventory in `data/trees.json`.
-6. Update gallery photos in `data/gallery.json`.
+Netlify is also supported via `@netlify/plugin-nextjs` (see `netlify.toml`).
 
-## Inventory format
+## Legacy static files
 
-Edit `data/trees.json` with entries like this:
-
-```json
-{
-  "id": "live-oak-45",
-  "name": "Live Oak",
-  "type": "Shade Tree",
-  "size": "45 gal",
-  "quantity": 18,
-  "price": "Call for pricing",
-  "notes": "Strong shade tree for large landscapes.",
-  "featured": true,
-  "image": "assets/tree-live-oak.svg"
-}
-```
-
-## Admin helper
-
-Open `admin.html` to paste a simple CSV inventory list and download a new `trees.json` file.
-
-This helper does not save directly to the live site. It creates the file you upload/replace.
-
-## Best simple publishing setup
-
-Use one of these:
-
-- Netlify Drop: easiest way to launch quickly.
-- GitHub + Netlify: best free professional setup.
-- Vercel: also good for static websites.
-
-## Later upgrades
-
-- Connect the form to Netlify Forms, Formspree, HubSpot, or a custom backend.
-- Add Decap CMS so the owner can edit inventory and gallery from a private admin login.
-- Add Google Analytics or Plausible Analytics.
-- Add a real domain and business email.
-- Add SEO location pages for nearby towns.
+The original static HTML/JSON starter files (`index.html`, `data/trees.json`, etc.) remain in the repo for reference. The live app is the Next.js routes under `app/`. Old `.html` URLs redirect to the new paths.

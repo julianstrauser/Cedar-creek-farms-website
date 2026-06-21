@@ -1,0 +1,85 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import PublicLayout from "@/components/PublicLayout";
+
+export const metadata: Metadata = {
+  title: "Tree Transplanting Services",
+  description:
+    "Tree transplanting, delivery, planting, site planning, and farm tree selection services.",
+};
+
+export default function ServicesPage() {
+  return (
+    <PublicLayout>
+      <section className="page-hero service-hero">
+        <p className="eyebrow">Tree moving and planting</p>
+        <h1>Tree Transplanting Services</h1>
+        <p>
+          Help customers understand what the farm can do: select trees, dig, move,
+          deliver, install, and give aftercare instructions.
+        </p>
+        <Link className="button primary" href="/contact">
+          Ask About Transplanting
+        </Link>
+      </section>
+
+      <section className="section service-grid">
+        <article className="service-card">
+          <span>01</span>
+          <h2>Tree selection</h2>
+          <p>
+            Guide customers toward the right tree based on size, sun exposure, soil,
+            watering access, and long-term growth.
+          </p>
+        </article>
+        <article className="service-card">
+          <span>02</span>
+          <h2>Digging and moving</h2>
+          <p>
+            Use the right equipment and timing to move established trees safely with
+            the best chance of success.
+          </p>
+        </article>
+        <article className="service-card">
+          <span>03</span>
+          <h2>Delivery and planting</h2>
+          <p>
+            Coordinate delivery, placement, planting depth, staking when needed, and
+            cleanup after the job.
+          </p>
+        </article>
+        <article className="service-card">
+          <span>04</span>
+          <h2>Aftercare guidance</h2>
+          <p>
+            Provide watering, mulching, and maintenance instructions so the tree has
+            a strong start.
+          </p>
+        </article>
+      </section>
+
+      <section className="section split-section reverse">
+        <div className="quote-card large">
+          <h2>Good quote requests include:</h2>
+          <ul className="check-list">
+            <li>Tree variety and approximate size wanted</li>
+            <li>Number of trees needed</li>
+            <li>Job location or delivery area</li>
+            <li>Photos of the planting area</li>
+            <li>Access notes for equipment</li>
+            <li>Timeline or deadline</li>
+          </ul>
+        </div>
+        <div>
+          <p className="eyebrow">Make pricing easier</p>
+          <h2>Ask for the right details up front.</h2>
+          <p>
+            The contact form is written to collect the details a tree farm needs
+            before quoting. That keeps calls cleaner and helps filter serious
+            customers from vague inquiries.
+          </p>
+        </div>
+      </section>
+    </PublicLayout>
+  );
+}

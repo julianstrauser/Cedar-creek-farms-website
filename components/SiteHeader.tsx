@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -19,7 +20,7 @@ export default function SiteHeader() {
   return (
     <header className="site-header">
       <Link className="brand" href="/" aria-label="Cedar Creek Farms home">
-        <img src="/assets/logo.svg" alt="" />
+        <Image src="/assets/logo.svg" alt="" width={42} height={42} unoptimized />
         <span>Cedar Creek Farms</span>
       </Link>
       <button

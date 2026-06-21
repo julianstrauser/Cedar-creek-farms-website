@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Product, ProductAvailability } from "@/lib/types";
 import { availabilityLabel, formatPrice, uploadSiteImage } from "@/lib/utils";
+import SiteImage from "@/components/SiteImage";
 
 const emptyProduct = {
   name: "",
@@ -241,7 +242,13 @@ export default function ProductsAdmin() {
             />
           </label>
           {form.image_url ? (
-            <img className="admin-thumb" src={form.image_url} alt="Product preview" />
+            <SiteImage
+              className="admin-thumb"
+              src={form.image_url}
+              alt="Product preview"
+              width={180}
+              height={135}
+            />
           ) : null}
           <div className="button-row">
             <button className="button primary" type="submit" disabled={uploading}>

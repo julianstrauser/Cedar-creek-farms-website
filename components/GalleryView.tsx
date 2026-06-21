@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { GalleryItem } from "@/lib/types";
+import SiteImage from "@/components/SiteImage";
 
 export default function GalleryView() {
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -65,7 +66,14 @@ export default function GalleryView() {
             type="button"
             onClick={() => setLightbox(item)}
           >
-            <img src={item.image_url} alt={item.alt_text || item.title} loading="lazy" />
+            <SiteImage
+              src={item.image_url}
+              alt={item.alt_text || item.title}
+              className="gallery-card-image"
+              width={800}
+              height={600}
+              sizes="(max-width: 720px) 100vw, 33vw"
+            />
             <div>
               <h3>{item.title}</h3>
               <p>{item.caption}</p>
@@ -84,7 +92,14 @@ export default function GalleryView() {
           >
             ×
           </button>
-          <img src={lightbox.image_url} alt={lightbox.alt_text || lightbox.title} />
+          <SiteImage
+            src={lightbox.image_url}
+            alt={lightbox.alt_text || lightbox.title}
+            className="lightbox-image"
+            width={900}
+            height={675}
+            sizes="(max-width: 900px) 100vw, 900px"
+          />
           <h2>{lightbox.title}</h2>
           <p>{lightbox.caption}</p>
         </dialog>

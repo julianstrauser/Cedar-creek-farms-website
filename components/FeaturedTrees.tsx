@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Product } from "@/lib/types";
 import { availabilityLabel, formatPrice } from "@/lib/utils";
 import { PRICING_HELPER_TEXT, pricingInquiryMailto } from "@/lib/contact";
+import SiteImage from "@/components/SiteImage";
 
 function TreeCard({
   tree,
@@ -17,11 +18,13 @@ function TreeCard({
 }) {
   return (
     <article className="tree-card">
-      <img
+      <SiteImage
         className="tree-card-image"
         src={tree.image_url || "/assets/logo.svg"}
         alt={tree.name}
-        loading="lazy"
+        width={640}
+        height={400}
+        sizes="(max-width: 720px) 100vw, 50vw"
       />
       <div className="tree-card-body">
         <h3>{tree.name}</h3>

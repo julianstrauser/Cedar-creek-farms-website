@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { GalleryItem } from "@/lib/types";
 import { uploadSiteImage } from "@/lib/utils";
+import SiteImage from "@/components/SiteImage";
 
 const emptyItem = {
   title: "",
@@ -191,7 +192,13 @@ export default function GalleryAdmin() {
             />
           </label>
           {form.image_url ? (
-            <img className="admin-thumb" src={form.image_url} alt="Gallery preview" />
+            <SiteImage
+              className="admin-thumb"
+              src={form.image_url}
+              alt="Gallery preview"
+              width={180}
+              height={135}
+            />
           ) : null}
           <label className="admin-checkbox">
             <input
@@ -223,7 +230,14 @@ export default function GalleryAdmin() {
       <div className="admin-gallery-grid">
         {items.map((item) => (
           <article className="admin-gallery-card" key={item.id}>
-            <img src={item.image_url} alt={item.alt_text || item.title} />
+            <SiteImage
+              className="admin-gallery-card-image"
+              src={item.image_url}
+              alt={item.alt_text || item.title}
+              width={400}
+              height={300}
+              sizes="(max-width: 950px) 100vw, 33vw"
+            />
             <div>
               <h3>{item.title}</h3>
               <p className="muted">{item.category}</p>

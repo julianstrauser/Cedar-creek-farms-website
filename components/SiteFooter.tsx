@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   SITE_CONTACT,
   contactEmailHref,
@@ -12,7 +13,7 @@ export default function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-main">
         <Link className="brand footer-brand" href="/">
-          <img src="/assets/logo.svg" alt="" />
+          <Image src="/assets/logo.svg" alt="" width={42} height={42} unoptimized />
           <span>Cedar Creek Farms</span>
         </Link>
         <p>Contact for current pricing and availability.</p>

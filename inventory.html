@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tree Availability | Cedar Creek Farms</title>
+  <meta name="description" content="Browse current tree availability by variety, size, type, and quantity." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header" data-header>
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /><span>Cedar Creek Farms</span></a>
+    <button class="menu-button" data-menu-button aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav id="main-nav" class="main-nav" data-nav>
+      <a href="inventory.html" aria-current="page">Tree Availability</a>
+      <a href="services.html">Transplanting</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html" class="nav-cta">Request Quote</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Current inventory</p>
+      <h1>Tree Availability</h1>
+      <p>Search by name, type, size, or notes. Quantities can change quickly, so customers should request a quote to confirm.</p>
+    </section>
+
+    <section class="section inventory-layout">
+      <aside class="filters" aria-label="Inventory filters">
+        <label for="tree-search">Search trees</label>
+        <input id="tree-search" data-tree-search type="search" placeholder="Oak, elm, 30 gal..." />
+        <label for="tree-type">Tree type</label>
+        <select id="tree-type" data-tree-type>
+          <option value="all">All types</option>
+        </select>
+        <label for="tree-size">Size</label>
+        <select id="tree-size" data-tree-size>
+          <option value="all">All sizes</option>
+        </select>
+        <button class="button secondary full" data-clear-filters type="button">Clear Filters</button>
+        <div class="inquiry-box">
+          <h2>Inquiry list</h2>
+          <p data-inquiry-count>0 trees selected</p>
+          <a class="button primary full" href="contact.html">Request Quote</a>
+          <button class="button ghost full" data-clear-inquiry type="button">Clear List</button>
+        </div>
+      </aside>
+
+      <div>
+        <div class="inventory-topline">
+          <p data-inventory-status>Loading inventory...</p>
+          <p class="muted">Edit availability in <code>data/trees.json</code>.</p>
+        </div>
+        <div class="tree-grid" data-tree-grid></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><a class="brand footer-brand" href="index.html"><img src="assets/logo.svg" alt="" /><span>Cedar Creek Farms</span></a><p>Field-grown trees and professional tree transplanting.</p></div>
+    <div class="footer-links"><a href="inventory.html">Availability</a><a href="services.html">Services</a><a href="gallery.html">Gallery</a><a href="contact.html">Contact</a></div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inventory Admin Helper | Cedar Creek Farms</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header" data-header>
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /><span>Cedar Creek Farms</span></a>
+    <button class="menu-button" data-menu-button aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav id="main-nav" class="main-nav" data-nav>
+      <a href="inventory.html">Tree Availability</a>
+      <a href="services.html">Transplanting</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html" class="nav-cta">Request Quote</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Private helper page</p>
+      <h1>Inventory Admin Helper</h1>
+      <p>This page helps you turn a simple CSV list into the website's <code>data/trees.json</code> file. It does not save to the live website by itself.</p>
+    </section>
+
+    <section class="section admin-layout">
+      <div class="quote-card large">
+        <h2>Paste CSV</h2>
+        <p>Use this header row: <code>name,type,size,quantity,price,notes,featured,image</code></p>
+        <textarea data-csv-input rows="12">name,type,size,quantity,price,notes,featured,image
+Live Oak,Shade Tree,45 gal,18,Call for pricing,Strong shade tree for large landscapes,true,assets/tree-live-oak.svg
+Cedar Elm,Shade Tree,30 gal,24,Call for pricing,Hardy option with good drought tolerance,true,assets/tree-cedar-elm.svg
+Texas Red Oak,Shade Tree,65 gal,9,Call for pricing,Great color and strong specimen presence,true,assets/tree-red-oak.svg</textarea>
+        <div class="button-row">
+          <button class="button primary" data-convert-csv type="button">Convert to JSON</button>
+          <button class="button secondary" data-download-json type="button">Download trees.json</button>
+        </div>
+      </div>
+      <div class="quote-card large">
+        <h2>JSON Output</h2>
+        <textarea data-json-output rows="18" spellcheck="false"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><a class="brand footer-brand" href="index.html"><img src="assets/logo.svg" alt="" /><span>Cedar Creek Farms</span></a><p>Field-grown trees and professional tree transplanting.</p></div>
+    <div class="footer-links"><a href="inventory.html">Availability</a><a href="services.html">Services</a><a href="gallery.html">Gallery</a><a href="contact.html">Contact</a></div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "farm-rows",
+    "title": "Farm Rows",
+    "category": "Farm",
+    "caption": "Organized tree rows ready for customer selection.",
+    "image": "assets/gallery-farm-rows.svg"
+  },
+  {
+    "id": "large-tree-install",
+    "title": "Large Tree Install",
+    "category": "Transplanting",
+    "caption": "Example placeholder for a finished tree planting project.",
+    "image": "assets/gallery-install.svg"
+  },
+  {
+    "id": "equipment",
+    "title": "Equipment Ready",
+    "category": "Equipment",
+    "caption": "Show customers the equipment used for digging, moving, and planting trees.",
+    "image": "assets/gallery-equipment.svg"
+  },
+  {
+    "id": "specimen-tree",
+    "title": "Specimen Tree",
+    "category": "Trees",
+    "caption": "Use this section for hero trees, mature trees, and premium inventory.",
+    "image": "assets/gallery-specimen.svg"
+  },
+  {
+    "id": "before-after",
+    "title": "Before & After",
+    "category": "Transplanting",
+    "caption": "Add project comparison photos to build trust with buyers.",
+    "image": "assets/gallery-before-after.svg"
+  },
+  {
+    "id": "delivery",
+    "title": "Delivery Day",
+    "category": "Equipment",
+    "caption": "Photos of delivery and planting help customers understand the process.",
+    "image": "assets/gallery-delivery.svg"
+  }
+]

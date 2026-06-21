@@ -1,0 +1,68 @@
+[
+  {
+    "id": "live-oak-45",
+    "name": "Live Oak",
+    "type": "Shade Tree",
+    "size": "45 gal",
+    "quantity": 18,
+    "price": "Call for pricing",
+    "notes": "Strong shade tree for large landscapes, driveways, and ranch-style properties.",
+    "featured": true,
+    "image": "assets/tree-live-oak.svg"
+  },
+  {
+    "id": "cedar-elm-30",
+    "name": "Cedar Elm",
+    "type": "Shade Tree",
+    "size": "30 gal",
+    "quantity": 24,
+    "price": "Call for pricing",
+    "notes": "Hardy option with good drought tolerance and a clean upright shape.",
+    "featured": true,
+    "image": "assets/tree-cedar-elm.svg"
+  },
+  {
+    "id": "texas-red-oak-65",
+    "name": "Texas Red Oak",
+    "type": "Shade Tree",
+    "size": "65 gal",
+    "quantity": 9,
+    "price": "Call for pricing",
+    "notes": "Great color and strong specimen presence for larger residential landscapes.",
+    "featured": true,
+    "image": "assets/tree-red-oak.svg"
+  },
+  {
+    "id": "bur-oak-95",
+    "name": "Bur Oak",
+    "type": "Specimen Tree",
+    "size": "95 gal",
+    "quantity": 5,
+    "price": "Call for pricing",
+    "notes": "Big, impressive tree for customers wanting a long-term statement tree.",
+    "featured": false,
+    "image": "assets/tree-bur-oak.svg"
+  },
+  {
+    "id": "desert-willow-15",
+    "name": "Desert Willow",
+    "type": "Ornamental Tree",
+    "size": "15 gal",
+    "quantity": 31,
+    "price": "Call for pricing",
+    "notes": "Smaller ornamental option with seasonal blooms and low-water appeal.",
+    "featured": false,
+    "image": "assets/tree-desert-willow.svg"
+  },
+  {
+    "id": "monterrey-oak-30",
+    "name": "Monterrey Oak",
+    "type": "Shade Tree",
+    "size": "30 gal",
+    "quantity": 14,
+    "price": "Call for pricing",
+    "notes": "Clean, dependable shade tree option for modern landscapes.",
+    "featured": false,
+    "image": "assets/tree-monterrey-oak.svg"
+  }
+]

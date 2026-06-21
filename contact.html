@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Request a Quote | Cedar Creek Farms</title>
+  <meta name="description" content="Request pricing for available trees, tree delivery, or transplanting services." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header" data-header>
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="" /><span>Cedar Creek Farms</span></a>
+    <button class="menu-button" data-menu-button aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav id="main-nav" class="main-nav" data-nav>
+      <a href="inventory.html">Tree Availability</a>
+      <a href="services.html">Transplanting</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html" aria-current="page" class="nav-cta">Request Quote</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Get pricing</p>
+      <h1>Request a Quote</h1>
+      <p>Send tree requests, transplanting details, job location, photos, and timeline. Replace the placeholder phone and email below with the real business contact info.</p>
+    </section>
+
+    <section class="section contact-layout">
+      <form class="contact-form" name="quote-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html" data-contact-form>
+        <input type="hidden" name="form-name" value="quote-request" />
+        <p class="hidden-field"><label>Do not fill this out: <input name="bot-field" /></label></p>
+        <div class="field-row">
+          <label>Name<input name="name" required placeholder="Your name" /></label>
+          <label>Phone<input name="phone" required placeholder="(000) 000-0000" /></label>
+        </div>
+        <label>Email<input name="email" type="email" placeholder="you@example.com" /></label>
+        <label>What do you need?
+          <select name="interest" required>
+            <option value="Tree purchase">Tree purchase</option>
+            <option value="Tree transplanting">Tree transplanting</option>
+            <option value="Delivery and planting">Delivery and planting</option>
+            <option value="General question">General question</option>
+          </select>
+        </label>
+        <label>Job location<input name="location" placeholder="City, area, or address" /></label>
+        <label>Message<textarea name="message" rows="7" placeholder="Tell us tree varieties, sizes, quantities, planting area, equipment access, and timeline."></textarea></label>
+        <label>Photo link<input name="photo" placeholder="Paste Google Drive, Dropbox, or photo album link" /></label>
+        <input type="hidden" name="selectedTrees" data-selected-trees-field />
+        <button class="button primary" type="submit">Submit Quote Request</button>
+        <p class="form-note">When deployed on Netlify, this form stores quote requests in the Netlify dashboard and can email you when a new request comes in.</p>
+      </form>
+
+      <aside class="contact-card">
+        <h2>Contact</h2>
+        <p><strong>Phone:</strong> <a href="tel:+10000000000">(000) 000-0000</a></p>
+        <p><strong>Email:</strong> <a href="mailto:info@example.com">info@example.com</a></p>
+        <p><strong>Service area:</strong> Your city / region</p>
+        <hr />
+        <h3>Your selected trees</h3>
+        <div data-contact-inquiry></div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><a class="brand footer-brand" href="index.html"><img src="assets/logo.svg" alt="" /><span>Cedar Creek Farms</span></a><p>Field-grown trees and professional tree transplanting.</p></div>
+    <div class="footer-links"><a href="inventory.html">Availability</a><a href="services.html">Services</a><a href="gallery.html">Gallery</a><a href="contact.html">Contact</a></div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

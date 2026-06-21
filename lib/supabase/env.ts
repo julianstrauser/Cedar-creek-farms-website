@@ -13,14 +13,13 @@ export type SupabaseEnvVarName =
   | typeof SUPABASE_ENV_KEYS.serverAnonKey
   | typeof SUPABASE_ENV_KEYS.serviceRoleKey;
 
-function readEnv(name: string): string {
-  const value = process.env[name];
-  return typeof value === "string" ? value.trim() : "";
-}
-
-export function isEnvVarSet(name: SupabaseEnvVarName | string): boolean {
-  return readEnv(name).length > 0;
-}
+/**
+ * Client env — direct static references only.
+ * Next.js inlines NEXT_PUBLIC_* at build time when accessed with dot notation.
+ */
+const CLIENT_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "";
+const CLIENT_SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? "";
 
 export type SupabaseConfigStatus = {
   urlConfigured: boolean;
@@ -37,8 +36,8 @@ export type SupabaseEnvDiagnostic = {
 /** Browser/client bundle — only NEXT_PUBLIC_* (inlined at build time). */
 export function getClientSupabaseEnv() {
   return {
-    url: readEnv(SUPABASE_ENV_KEYS.publicUrl),
-    anonKey: readEnv(SUPABASE_ENV_KEYS.publicAnonKey),
+    url: CLIENT_SUPABASE_URL,
+    anonKey: CLIENT_SUPABASE_ANON_KEY,
   };
 }
 
@@ -48,13 +47,17 @@ export function getClientSupabaseEnv() {
  * Never reads SUPABASE_SERVICE_ROLE_KEY.
  */
 export function getServerSupabaseEnv() {
-  return {
-    url:
-      readEnv(SUPABASE_ENV_KEYS.serverUrl) || readEnv(SUPABASE_ENV_KEYS.publicUrl),
-    anonKey:
-      readEnv(SUPABASE_ENV_KEYS.serverAnonKey) ||
-      readEnv(SUPABASE_ENV_KEYS.publicAnonKey),
-  };
+  const url =
+    process.env.SUPABASE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
+    "";
+
+  const anonKey =
+    process.env.SUPABASE_ANON_KEY?.trim() ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
+    "";
+
+  return { url, anonKey };
 }
 
 export function getSupabaseConfigStatus(
@@ -72,22 +75,27 @@ export function isSupabaseConfigured(target: "client" | "server" = "server") {
   return status.urlConfigured && status.anonKeyConfigured;
 }
 
-/** Safe diagnostics: true/false only, never key values. */
+/** Safe diagnostics: true/false only, never key values. Uses direct env references. */
 export function getSupabaseEnvDiagnostic(): SupabaseEnvDiagnostic {
-  const serverStatus = getSupabaseConfigStatus("server");
-  const clientStatus = getSupabaseConfigStatus("client");
+  const clientEnv = getClientSupabaseEnv();
+  const serverEnv = getServerSupabaseEnv();
 
   return {
     vars: {
-      [SUPABASE_ENV_KEYS.publicUrl]: isEnvVarSet(SUPABASE_ENV_KEYS.publicUrl),
-      [SUPABASE_ENV_KEYS.publicAnonKey]: isEnvVarSet(SUPABASE_ENV_KEYS.publicAnonKey),
-      [SUPABASE_ENV_KEYS.serverUrl]: isEnvVarSet(SUPABASE_ENV_KEYS.serverUrl),
-      [SUPABASE_ENV_KEYS.serverAnonKey]: isEnvVarSet(SUPABASE_ENV_KEYS.serverAnonKey),
-      [SUPABASE_ENV_KEYS.serviceRoleKey]: isEnvVarSet(SUPABASE_ENV_KEYS.serviceRoleKey),
+      [SUPABASE_ENV_KEYS.publicUrl]:
+        (process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "").length > 0,
+      [SUPABASE_ENV_KEYS.publicAnonKey]:
+        (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? "").length > 0,
+      [SUPABASE_ENV_KEYS.serverUrl]:
+        (process.env.SUPABASE_URL?.trim() ?? "").length > 0,
+      [SUPABASE_ENV_KEYS.serverAnonKey]:
+        (process.env.SUPABASE_ANON_KEY?.trim() ?? "").length > 0,
+      [SUPABASE_ENV_KEYS.serviceRoleKey]:
+        (process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? "").length > 0,
     },
-    serverReady: serverStatus.urlConfigured && serverStatus.anonKeyConfigured,
-    clientReady: clientStatus.urlConfigured && clientStatus.anonKeyConfigured,
-    loginReady: serverStatus.urlConfigured && serverStatus.anonKeyConfigured,
+    serverReady: serverEnv.url.length > 0 && serverEnv.anonKey.length > 0,
+    clientReady: clientEnv.url.length > 0 && clientEnv.anonKey.length > 0,
+    loginReady: serverEnv.url.length > 0 && serverEnv.anonKey.length > 0,
   };
 }
 
@@ -95,20 +103,15 @@ function missingKeysForTarget(target: "client" | "server"): string[] {
   const missing: string[] = [];
 
   if (target === "client") {
-    if (!isEnvVarSet(SUPABASE_ENV_KEYS.publicUrl)) {
-      missing.push(SUPABASE_ENV_KEYS.publicUrl);
-    }
-    if (!isEnvVarSet(SUPABASE_ENV_KEYS.publicAnonKey)) {
-      missing.push(SUPABASE_ENV_KEYS.publicAnonKey);
-    }
+    const clientEnv = getClientSupabaseEnv();
+    if (!clientEnv.url) missing.push(SUPABASE_ENV_KEYS.publicUrl);
+    if (!clientEnv.anonKey) missing.push(SUPABASE_ENV_KEYS.publicAnonKey);
     return missing;
   }
 
   const serverEnv = getServerSupabaseEnv();
   if (!serverEnv.url) {
-    missing.push(
-      `${SUPABASE_ENV_KEYS.serverUrl} or ${SUPABASE_ENV_KEYS.publicUrl}`
-    );
+    missing.push(`${SUPABASE_ENV_KEYS.serverUrl} or ${SUPABASE_ENV_KEYS.publicUrl}`);
   }
   if (!serverEnv.anonKey) {
     missing.push(

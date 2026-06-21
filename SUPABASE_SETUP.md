@@ -127,7 +127,7 @@ After deploy, set the Supabase **Site URL** and **Redirect URLs**:
 
 - Supabase → **Authentication → URL Configuration**
 - Site URL: `https://your-domain.com`
-- Redirect URLs: `https://your-domain.com/admin`, `http://localhost:3000/admin`
+- Redirect URLs: `https://your-domain.com/auth/callback`, `https://your-domain.com/admin`, `http://localhost:3000/auth/callback`, `http://localhost:3000/admin`
 
 ---
 

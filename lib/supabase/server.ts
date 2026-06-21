@@ -28,8 +28,9 @@ export async function createClient() {
           cookiesToSet.forEach(({ name, value, options }) => {
             cookieStore.set(name, value, sanitizeCookieOptions(options));
           });
-        } catch {
+        } catch (error) {
           // Server Components cannot always set cookies during render.
+          console.error("[supabase] failed to set auth cookies:", error);
         }
       },
     },
@@ -47,18 +48,19 @@ function sanitizeCookieOptions(
       ? sameSite
       : undefined;
 
-  return {
-    maxAge: typeof options.maxAge === "number" ? options.maxAge : undefined,
-    expires:
-      options.expires instanceof Date
-        ? options.expires
-        : typeof options.expires === "string" || typeof options.expires === "number"
-          ? new Date(options.expires)
-          : undefined,
-    path: typeof options.path === "string" ? options.path : undefined,
-    domain: typeof options.domain === "string" ? options.domain : undefined,
-    secure: typeof options.secure === "boolean" ? options.secure : undefined,
-    httpOnly: typeof options.httpOnly === "boolean" ? options.httpOnly : undefined,
-    sameSite: normalizedSameSite,
-  };
+  const sanitized: Partial<ResponseCookie> = {};
+
+  if (typeof options.maxAge === "number") sanitized.maxAge = options.maxAge;
+  if (options.expires instanceof Date) {
+    sanitized.expires = options.expires;
+  } else if (typeof options.expires === "string" || typeof options.expires === "number") {
+    sanitized.expires = new Date(options.expires);
+  }
+  if (typeof options.path === "string") sanitized.path = options.path;
+  if (typeof options.domain === "string") sanitized.domain = options.domain;
+  if (typeof options.secure === "boolean") sanitized.secure = options.secure;
+  if (typeof options.httpOnly === "boolean") sanitized.httpOnly = options.httpOnly;
+  if (normalizedSameSite) sanitized.sameSite = normalizedSameSite;
+
+  return Object.keys(sanitized).length > 0 ? sanitized : undefined;
 }

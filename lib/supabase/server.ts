@@ -28,7 +28,10 @@ export async function createClient() {
             cookieStore.set(name, value, sanitizeCookieOptions(options));
           });
         } catch (error) {
-          // Server Components cannot always set cookies during render.
+          // Expected in Server Components — middleware refreshes the session instead.
+          if (isReadOnlyCookieError(error)) {
+            return;
+          }
           console.error("[supabase] failed to set auth cookies:", error);
         }
       },
@@ -62,4 +65,11 @@ function sanitizeCookieOptions(
   if (normalizedSameSite) sanitized.sameSite = normalizedSameSite;
 
   return Object.keys(sanitized).length > 0 ? sanitized : undefined;
+}
+
+function isReadOnlyCookieError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    error.message.includes("Cookies can only be modified in a Server Action or Route Handler")
+  );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PublicLayout from "@/components/PublicLayout";
 import ContactForm, { ContactSidebar } from "@/components/ContactForm";
 import FaqSection from "@/components/FaqSection";
+import PageHero from "@/components/PageHero";
 import ServiceAreaSection from "@/components/ServiceAreaSection";
 import { ScrollReveal } from "@/components/motion";
 import { getSiteSettings } from "@/lib/settings";
@@ -17,11 +18,11 @@ export default async function ContactPage() {
 
   return (
     <PublicLayout>
-      <ScrollReveal as="section" className="page-hero compact">
-        <p className="eyebrow">Get in touch</p>
-        <h1>Contact Cedar Creek Farms</h1>
-        <p>{settings.contact_page_intro}</p>
-      </ScrollReveal>
+      <PageHero
+        eyebrow="Get in touch"
+        title="Contact Cedar Creek Farms"
+        description={settings.contact_page_intro ?? ""}
+      />
 
       <ScrollReveal as="section" className="section contact-layout">
         <ContactForm />

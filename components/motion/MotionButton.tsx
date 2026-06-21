@@ -8,14 +8,14 @@ const MotionLink = motion.create(Link);
 const MotionAnchor = motion.create("a");
 
 const buttonInteractive = {
-  whileHover: { y: -2, scale: 1.015 },
-  whileTap: { scale: 0.98, y: 0 },
+  whileHover: { y: -3, scale: 1.02 },
+  whileTap: { scale: 0.97, y: 0 },
   transition: { duration: DURATION.fast, ease: EASE },
 };
 
 const textInteractive = {
-  whileHover: { x: 3 },
-  whileTap: { scale: 0.99 },
+  whileHover: { x: 4 },
+  whileTap: { scale: 0.98 },
   transition: { duration: DURATION.fast, ease: EASE },
 };
 

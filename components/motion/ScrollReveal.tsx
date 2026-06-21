@@ -8,6 +8,8 @@ type ScrollRevealProps = {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  /** Use mount animation for above-the-fold content (hero areas) */
+  priority?: boolean;
 };
 
 export default function ScrollReveal({
@@ -15,6 +17,7 @@ export default function ScrollReveal({
   children,
   className,
   delay = 0,
+  priority = false,
 }: ScrollRevealProps) {
   const reduced = useReducedMotion();
 
@@ -23,13 +26,20 @@ export default function ScrollReveal({
     return <Tag className={className}>{children}</Tag>;
   }
 
-  const motionProps = {
+  const motionState = {
+    opacity: 1,
+    y: 0,
+  };
+
+  const baseProps = {
     className,
     initial: { opacity: 0, y: OFFSET },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: VIEWPORT,
-    transition: { duration: DURATION.base, ease: EASE, delay },
+    transition: { duration: DURATION.slow, ease: EASE, delay },
   };
+
+  const motionProps = priority
+    ? { ...baseProps, animate: motionState }
+    : { ...baseProps, whileInView: motionState, viewport: VIEWPORT };
 
   if (as === "section") return <motion.section {...motionProps}>{children}</motion.section>;
   if (as === "article") return <motion.article {...motionProps}>{children}</motion.article>;

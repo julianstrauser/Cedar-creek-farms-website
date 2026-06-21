@@ -1,17 +1,29 @@
 /** Cedar Creek Farms — shared motion tokens */
-export const EASE = [0.25, 0.1, 0.25, 1] as const;
+export const EASE = [0.22, 0.03, 0.26, 1] as const;
 
 export const DURATION = {
-  fast: 0.2,
-  base: 0.3,
-  slow: 0.4,
+  fast: 0.25,
+  base: 0.55,
+  slow: 0.65,
+  page: 0.4,
 } as const;
 
-export const OFFSET = 16;
+/** Scroll reveal vertical travel (px) */
+export const OFFSET = 40;
 
-export const STAGGER = 0.08;
+/** Staggered child vertical travel (px) */
+export const STAGGER_OFFSET = 36;
 
+export const STAGGER = 0.1;
+
+/** Triggers when ~20% of the element is visible */
 export const VIEWPORT = {
   once: true,
-  margin: "-60px 0px -40px 0px",
+  amount: 0.2,
+} as const;
+
+/** Slightly earlier trigger for large grids */
+export const VIEWPORT_GRID = {
+  once: true,
+  amount: 0.15,
 } as const;

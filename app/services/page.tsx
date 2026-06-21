@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import PublicLayout from "@/components/PublicLayout";
+import PageHero from "@/components/PageHero";
 import {
   MotionButton,
+  MotionCard,
   ScrollReveal,
   StaggerContainer,
   StaggerItem,
@@ -16,65 +18,64 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <PublicLayout>
-      <ScrollReveal as="section" className="page-hero service-hero">
-        <p className="eyebrow">Tree moving and planting</p>
-        <h1>Tree Transplanting Services</h1>
-        <p>
-          Help customers understand what the farm can do: select trees, dig, move,
-          deliver, install, and give aftercare instructions.
-        </p>
+      <PageHero
+        className="page-hero service-hero"
+        eyebrow="Tree moving and planting"
+        title="Tree Transplanting Services"
+        description="Help customers understand what the farm can do: select trees, dig, move, deliver, install, and give aftercare instructions."
+      >
         <MotionButton className="button primary" href="/contact">
           Ask About Transplanting
         </MotionButton>
-      </ScrollReveal>
+      </PageHero>
 
       <ScrollReveal as="section" className="section">
         <StaggerContainer className="service-grid">
           <StaggerItem>
-            <article className="service-card motion-card">
+            <MotionCard className="service-card">
               <span>01</span>
               <h2>Tree selection</h2>
               <p>
                 Guide customers toward the right tree based on size, sun exposure, soil,
                 watering access, and long-term growth.
               </p>
-            </article>
+            </MotionCard>
           </StaggerItem>
           <StaggerItem>
-            <article className="service-card motion-card">
+            <MotionCard className="service-card">
               <span>02</span>
               <h2>Digging and moving</h2>
               <p>
                 Use the right equipment and timing to move established trees safely with
                 the best chance of success.
               </p>
-            </article>
+            </MotionCard>
           </StaggerItem>
           <StaggerItem>
-            <article className="service-card motion-card">
+            <MotionCard className="service-card">
               <span>03</span>
               <h2>Delivery and planting</h2>
               <p>
                 Coordinate delivery, placement, planting depth, staking when needed, and
                 cleanup after the job.
               </p>
-            </article>
+            </MotionCard>
           </StaggerItem>
           <StaggerItem>
-            <article className="service-card motion-card">
+            <MotionCard className="service-card">
               <span>04</span>
               <h2>Aftercare guidance</h2>
               <p>
                 Provide watering, mulching, and maintenance instructions so the tree has
                 a strong start.
               </p>
-            </article>
+            </MotionCard>
           </StaggerItem>
         </StaggerContainer>
       </ScrollReveal>
 
       <ScrollReveal as="section" className="section split-section reverse">
-        <article className="quote-card large motion-card">
+        <MotionCard className="quote-card large">
           <h2>Good quote requests include:</h2>
           <ul className="check-list">
             <li>Tree variety and approximate size wanted</li>
@@ -84,7 +85,7 @@ export default function ServicesPage() {
             <li>Access notes for equipment</li>
             <li>Timeline or deadline</li>
           </ul>
-        </article>
+        </MotionCard>
         <div>
           <p className="eyebrow">Make pricing easier</p>
           <h2>Ask for the right details up front.</h2>

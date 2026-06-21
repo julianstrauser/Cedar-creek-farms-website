@@ -72,6 +72,20 @@ export default function SiteHeader() {
           </nav>
           <AnimatePresence>
             {open ? (
+              <motion.button
+                type="button"
+                className="mobile-nav-backdrop"
+                aria-label="Close menu"
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              />
+            ) : null}
+          </AnimatePresence>
+          <AnimatePresence>
+            {open ? (
               <motion.nav
                 id="main-nav-mobile"
                 className="main-nav mobile-nav open"
@@ -97,14 +111,6 @@ export default function SiteHeader() {
           </AnimatePresence>
         </>
       )}
-      {open ? (
-        <button
-          type="button"
-          className="mobile-nav-backdrop"
-          aria-label="Close menu"
-          onClick={() => setOpen(false)}
-        />
-      ) : null}
     </header>
   );
 }

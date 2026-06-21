@@ -78,8 +78,8 @@ export default function GalleryView() {
             onClick={() => setActive(cat!)}
             {...(!reduced
               ? {
-                  whileHover: { y: -1, scale: 1.02 },
-                  whileTap: { scale: 0.98 },
+                  whileHover: { y: -2, scale: 1.03 },
+                  whileTap: { scale: 0.97 },
                   transition: { duration: DURATION.fast, ease: EASE },
                 }
               : {})}
@@ -118,10 +118,10 @@ export default function GalleryView() {
                 type="button"
                 onClick={() => setLightbox(item)}
                 whileHover={{
-                  y: -4,
-                  boxShadow: "0 20px 40px rgba(14, 40, 29, 0.12)",
+                  y: -8,
+                  boxShadow: "0 28px 50px rgba(14, 40, 29, 0.16)",
                 }}
-                whileTap={{ scale: 0.99 }}
+                whileTap={{ scale: 0.98 }}
                 transition={{ duration: DURATION.fast, ease: EASE }}
               >
                 <div className="gallery-card-image-wrap">

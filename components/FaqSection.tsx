@@ -1,4 +1,6 @@
-import { ScrollReveal } from "@/components/motion";
+"use client";
+
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/motion";
 
 const FAQ_ITEMS = [
   {
@@ -38,14 +40,16 @@ export default function FaqSection({ title = "Frequently asked questions" }: { t
     <ScrollReveal as="section" className="section faq-section">
       <p className="eyebrow">Questions</p>
       <h2>{title}</h2>
-      <div className="faq-list">
+      <StaggerContainer className="faq-list">
         {FAQ_ITEMS.map((item) => (
-          <details key={item.question} className="faq-item">
-            <summary>{item.question}</summary>
-            <p>{item.answer}</p>
-          </details>
+          <StaggerItem key={item.question}>
+            <details className="faq-item">
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
     </ScrollReveal>
   );
 }

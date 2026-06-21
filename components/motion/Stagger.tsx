@@ -5,6 +5,7 @@ import {
   staggerContainerVariants,
   staggerItemVariants,
 } from "@/lib/motion/variants";
+import { VIEWPORT_GRID } from "@/lib/motion/tokens";
 import type { MotionComponentProps } from "@/lib/motion/types";
 
 export function StaggerContainer({
@@ -23,7 +24,7 @@ export function StaggerContainer({
       className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-60px 0px -40px 0px" }}
+      viewport={VIEWPORT_GRID}
       variants={staggerContainerVariants}
       {...props}
     >
@@ -44,7 +45,7 @@ export function StaggerItem({
   }
 
   return (
-    <motion.div className={className} variants={staggerItemVariants} {...props}>
+    <motion.div className={`stagger-item${className ? ` ${className}` : ""}`} variants={staggerItemVariants} {...props}>
       {children}
     </motion.div>
   );

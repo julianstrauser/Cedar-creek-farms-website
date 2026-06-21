@@ -33,8 +33,11 @@ export default function NavLink({
       aria-current={active ? "page" : undefined}
       onClick={onClick}
       className="nav-link-motion"
-      whileHover={{ backgroundColor: "rgba(31, 83, 63, 0.1)" }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{
+        backgroundColor: "rgba(31, 83, 63, 0.12)",
+        color: "var(--green-700)",
+      }}
+      whileTap={{ scale: 0.97 }}
       transition={{ duration: DURATION.fast, ease: EASE }}
     >
       {children}
@@ -45,7 +48,7 @@ export default function NavLink({
           aria-hidden
           initial={{ scaleX: 0 }}
           whileHover={{ scaleX: 1 }}
-          transition={{ duration: DURATION.fast, ease: EASE }}
+          transition={{ duration: DURATION.base, ease: EASE }}
         />
       ) : null}
     </MotionLink>

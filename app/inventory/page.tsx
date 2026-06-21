@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PublicLayout from "@/components/PublicLayout";
 import InventoryView from "@/components/InventoryView";
-import { ScrollReveal } from "@/components/motion";
+import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
   title: "Tree Availability",
@@ -12,14 +12,11 @@ export const metadata: Metadata = {
 export default function InventoryPage() {
   return (
     <PublicLayout>
-      <ScrollReveal as="section" className="page-hero compact">
-        <p className="eyebrow">Current inventory</p>
-        <h1>Tree Availability</h1>
-        <p>
-          Search by name, type, size, or notes. Availability is updated
-          regularly — contact us for current pricing and to confirm quantities.
-        </p>
-      </ScrollReveal>
+      <PageHero
+        eyebrow="Current inventory"
+        title="Tree Availability"
+        description="Search by name, type, size, or notes. Availability is updated regularly — contact us for current pricing and to confirm quantities."
+      />
       <InventoryView />
     </PublicLayout>
   );

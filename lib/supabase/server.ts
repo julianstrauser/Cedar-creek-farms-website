@@ -1,19 +1,18 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import {
+  getServerSupabaseEnv,
+  getSupabaseConfigErrorMessage,
+} from "@/lib/supabase/env";
 
-export function isSupabaseConfigured() {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
-}
+export { isSupabaseConfigured, getSupabaseConfigStatus } from "@/lib/supabase/env";
 
 export async function createClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const { url, anonKey } = getServerSupabaseEnv();
 
   if (!url || !anonKey) {
-    throw new Error("Supabase environment variables are not configured.");
+    throw new Error(getSupabaseConfigErrorMessage("server") || "Supabase is not configured.");
   }
 
   const cookieStore = await cookies();

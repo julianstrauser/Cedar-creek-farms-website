@@ -5,6 +5,7 @@ import {
   contactEmailHref,
   contactPhoneHref,
 } from "@/lib/contact";
+import FooterLinks from "@/components/SiteFooterLinks";
 
 export default function SiteFooter() {
   const phoneHref = contactPhoneHref();
@@ -32,12 +33,7 @@ export default function SiteFooter() {
           </p>
         </div>
       </div>
-      <div className="footer-links">
-        <Link href="/inventory">Availability</Link>
-        <Link href="/services">Services</Link>
-        <Link href="/gallery">Gallery</Link>
-        <Link href="/contact">Contact</Link>
-      </div>
+      <FooterLinks />
     </footer>
   );
 }

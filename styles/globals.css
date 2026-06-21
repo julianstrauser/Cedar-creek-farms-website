@@ -23,6 +23,18 @@
 
 html { scroll-behavior: smooth; }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
   margin: 0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -55,6 +67,11 @@ code {
   border-bottom: 1px solid rgba(23, 59, 47, 0.1);
 }
 
+.site-header .brand {
+  position: relative;
+  z-index: 52;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -74,18 +91,39 @@ code {
   gap: 0.5rem;
 }
 
-.main-nav a {
+.main-nav a,
+.nav-link-motion {
   text-decoration: none;
   font-weight: 700;
   font-size: 0.95rem;
   color: var(--green-900);
   padding: 0.7rem 0.9rem;
   border-radius: 999px;
+  position: relative;
+  display: block;
 }
 
 .main-nav a:hover,
-.main-nav a[aria-current="page"] {
+.main-nav a[aria-current="page"],
+.nav-link-motion:hover,
+.nav-link-motion[aria-current="page"] {
   background: rgba(31, 83, 63, 0.1);
+}
+
+.nav-link-underline {
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0.45rem;
+  height: 2px;
+  background: var(--green-700);
+  border-radius: 999px;
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.nav-link-underline.active {
+  transform: scaleX(1);
 }
 
 .main-nav .nav-cta {
@@ -104,6 +142,42 @@ code {
   font-weight: 800;
   border-radius: 999px;
   padding: 0.65rem 0.9rem;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 52;
+}
+
+.hamburger-icon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 18px;
+  height: 14px;
+}
+
+.hamburger-line {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--green-900);
+  border-radius: 999px;
+  transform-origin: center;
+}
+
+.menu-button-label {
+  font-size: 0.92rem;
+}
+
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  border: 0;
+  background: rgba(12, 33, 25, 0.18);
+  cursor: pointer;
 }
 
 .hero {
@@ -165,10 +239,8 @@ code {
   text-decoration: none;
   font-weight: 900;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  transition: background 200ms ease, box-shadow 200ms ease, color 200ms ease;
 }
-
-.button:hover { transform: translateY(-1px); }
 
 .button.primary {
   background: var(--green-800);
@@ -293,11 +365,28 @@ code {
 .quote-card,
 .contact-card,
 .inquiry-box,
-.gallery-card {
+.gallery-card,
+.motion-card {
   background: rgba(255,255,255,.8);
   border: 1px solid rgba(23, 59, 47, 0.12);
   border-radius: var(--radius-lg);
   box-shadow: 0 12px 30px rgba(14, 40, 29, 0.07);
+  transition: box-shadow 250ms ease;
+}
+
+.tree-card-image-wrap,
+.gallery-card-image-wrap {
+  overflow: hidden;
+}
+
+.tree-card:hover .tree-card-image,
+.gallery-card:hover .gallery-card-image {
+  transform: scale(1.03);
+}
+
+.tree-card-image,
+.gallery-card-image {
+  transition: transform 350ms ease;
 }
 
 .feature-card,
@@ -516,6 +605,10 @@ textarea { resize: vertical; }
   flex-wrap: wrap;
   gap: 0.65rem;
 }
+
+.availability-categories > div {
+  display: contents;
+}
 .availability-categories .badge {
   min-height: 36px;
   padding: 0.45rem 0.9rem;
@@ -617,6 +710,22 @@ textarea { resize: vertical; }
 
 @media (max-width: 720px) {
   .menu-button { display: inline-flex; }
+  .main-nav.desktop-nav { display: none; }
+  .main-nav.mobile-nav {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    top: calc(100% + .6rem);
+    z-index: 51;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: .7rem;
+    background: var(--white);
+    border: 1px solid rgba(23,59,47,.12);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+  }
   .main-nav {
     position: absolute;
     left: 1rem;
@@ -632,7 +741,8 @@ textarea { resize: vertical; }
     box-shadow: var(--shadow);
   }
   .main-nav.open { display: flex; }
-  .main-nav a { border-radius: 16px; }
+  .main-nav a,
+  .nav-link-motion { border-radius: 16px; }
   .hero-stats,
   .feature-grid,
   .tree-grid,
@@ -974,5 +1084,116 @@ textarea { resize: vertical; }
 @media (max-width: 720px) {
   .admin-nav {
     width: 100%;
+  }
+}
+
+/* Motion utilities */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(23, 59, 47, 0.06) 0%,
+    rgba(23, 59, 47, 0.12) 50%,
+    rgba(23, 59, 47, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 12px;
+}
+
+.skeleton-static {
+  animation: none;
+  background: rgba(23, 59, 47, 0.08);
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-image {
+  width: 100%;
+  min-height: 180px;
+  border-radius: 0;
+}
+
+.skeleton-line {
+  height: 14px;
+  margin-bottom: 0.65rem;
+}
+
+.skeleton-line-lg { width: 55%; height: 22px; }
+.skeleton-line-md { width: 40%; }
+.skeleton-line-sm { width: 30%; height: 12px; }
+.skeleton-line-full { width: 100%; }
+
+.skeleton-badge {
+  width: 72px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.skeleton-button {
+  width: 100%;
+  height: 46px;
+  margin-top: 0.75rem;
+  border-radius: 999px;
+}
+
+.skeleton-button-lg {
+  margin-top: 1.25rem;
+}
+
+.loading-pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.loading-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-700);
+}
+
+.loading-pulse-dot-static {
+  opacity: 0.65;
+}
+
+.lightbox {
+  animation: lightbox-in 0.3s ease forwards;
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-card:hover .tree-card-image,
+  .gallery-card:hover .gallery-card-image {
+    transform: none;
+  }
+
+  .lightbox {
+    animation: none;
+  }
+
+  .skeleton {
+    animation: none;
   }
 }

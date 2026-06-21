@@ -1,6 +1,11 @@
-import Link from "next/link";
 import PublicLayout from "@/components/PublicLayout";
 import FeaturedTrees from "@/components/FeaturedTrees";
+import {
+  MotionButton,
+  ScrollReveal,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/motion";
 
 const AVAILABILITY_CATEGORIES = [
   "Shade Trees",
@@ -12,7 +17,7 @@ const AVAILABILITY_CATEGORIES = [
 export default function HomePage() {
   return (
     <PublicLayout>
-      <section className="hero">
+      <ScrollReveal as="section" className="hero">
         <div className="hero-content">
           <p className="eyebrow">
             Field-grown trees • Professional transplanting • Reliable availability
@@ -23,12 +28,12 @@ export default function HomePage() {
             farm and transplanting work.
           </p>
           <div className="hero-actions">
-            <Link className="button primary" href="/inventory">
+            <MotionButton className="button primary" href="/inventory">
               View Available Trees
-            </Link>
-            <Link className="button secondary" href="/contact">
+            </MotionButton>
+            <MotionButton className="button secondary" href="/contact">
               Contact Us
-            </Link>
+            </MotionButton>
           </div>
         </div>
         <div className="hero-panel" aria-label="Tree farm highlight card">
@@ -55,9 +60,9 @@ export default function HomePage() {
             </div>
           </dl>
         </div>
-      </section>
+      </ScrollReveal>
 
-      <section className="section availability-section">
+      <ScrollReveal as="section" className="section availability-section" delay={0.05}>
         <div>
           <p className="eyebrow">Availability updated regularly</p>
           <h2>Current inventory across tree types and seasons.</h2>
@@ -67,19 +72,19 @@ export default function HomePage() {
             availability.
           </p>
         </div>
-        <div className="availability-categories" aria-label="Tree categories">
+        <StaggerContainer className="availability-categories" aria-label="Tree categories">
           {AVAILABILITY_CATEGORIES.map((category) => (
-            <span key={category} className="badge">
-              {category}
-            </span>
+            <StaggerItem key={category}>
+              <span className="badge">{category}</span>
+            </StaggerItem>
           ))}
-        </div>
-        <Link className="button secondary" href="/inventory">
+        </StaggerContainer>
+        <MotionButton className="button secondary" href="/inventory">
           View Tree Availability
-        </Link>
-      </section>
+        </MotionButton>
+      </ScrollReveal>
 
-      <section className="section split-section">
+      <ScrollReveal as="section" className="section split-section">
         <div>
           <p className="eyebrow">What we offer</p>
           <h2>A professional tree farm experience for every customer.</h2>
@@ -89,39 +94,47 @@ export default function HomePage() {
             for pricing and availability.
           </p>
         </div>
-        <div className="feature-grid">
-          <article className="feature-card">
-            <span className="feature-icon">🌳</span>
-            <h3>Tree inventory</h3>
-            <p>Searchable availability by tree name, size, type, and notes.</p>
-          </article>
-          <article className="feature-card">
-            <span className="feature-icon">🚜</span>
-            <h3>Transplanting services</h3>
-            <p>
-              Clear service page explaining moving, delivery, planting, and site
-              prep.
-            </p>
-          </article>
-          <article className="feature-card">
-            <span className="feature-icon">📷</span>
-            <h3>Project gallery</h3>
-            <p>
-              Photo sections for farm rows, installs, before-and-after work, and
-              equipment.
-            </p>
-          </article>
-          <article className="feature-card">
-            <span className="feature-icon">📩</span>
-            <h3>Pricing requests</h3>
-            <p>
-              Contact us for current pricing, size options, and availability.
-            </p>
-          </article>
-        </div>
-      </section>
+        <StaggerContainer className="feature-grid">
+          <StaggerItem>
+            <article className="feature-card motion-card">
+              <span className="feature-icon">🌳</span>
+              <h3>Tree inventory</h3>
+              <p>Searchable availability by tree name, size, type, and notes.</p>
+            </article>
+          </StaggerItem>
+          <StaggerItem>
+            <article className="feature-card motion-card">
+              <span className="feature-icon">🚜</span>
+              <h3>Transplanting services</h3>
+              <p>
+                Clear service page explaining moving, delivery, planting, and site
+                prep.
+              </p>
+            </article>
+          </StaggerItem>
+          <StaggerItem>
+            <article className="feature-card motion-card">
+              <span className="feature-icon">📷</span>
+              <h3>Project gallery</h3>
+              <p>
+                Photo sections for farm rows, installs, before-and-after work, and
+                equipment.
+              </p>
+            </article>
+          </StaggerItem>
+          <StaggerItem>
+            <article className="feature-card motion-card">
+              <span className="feature-icon">📩</span>
+              <h3>Pricing requests</h3>
+              <p>
+                Contact us for current pricing, size options, and availability.
+              </p>
+            </article>
+          </StaggerItem>
+        </StaggerContainer>
+      </ScrollReveal>
 
-      <section className="section band">
+      <ScrollReveal as="section" className="section band">
         <div>
           <p className="eyebrow">Featured availability</p>
           <h2>Popular trees customers ask about.</h2>
@@ -131,42 +144,48 @@ export default function HomePage() {
           </p>
         </div>
         <FeaturedTrees />
-        <Link href="/inventory" className="text-link">
+        <MotionButton href="/inventory" className="text-link motion-text-link">
           See the full availability list →
-        </Link>
-      </section>
+        </MotionButton>
+      </ScrollReveal>
 
-      <section className="section process">
+      <ScrollReveal as="section" className="section process">
         <p className="eyebrow">Simple customer flow</p>
         <h2>How customers work with the farm.</h2>
-        <div className="steps">
-          <article>
-            <span>1</span>
-            <h3>Browse availability</h3>
-            <p>
-              Review current trees and contact us about the varieties you need.
-            </p>
-          </article>
-          <article>
-            <span>2</span>
-            <h3>Confirm the details</h3>
-            <p>
-              We confirm sizing, quantity, location, delivery, and transplanting
-              needs with current pricing.
-            </p>
-          </article>
-          <article>
-            <span>3</span>
-            <h3>Schedule the job</h3>
-            <p>
-              After pricing is approved, we schedule pickup, delivery, or
-              transplanting.
-            </p>
-          </article>
-        </div>
-      </section>
+        <StaggerContainer className="steps">
+          <StaggerItem>
+            <article className="motion-card">
+              <span>1</span>
+              <h3>Browse availability</h3>
+              <p>
+                Review current trees and contact us about the varieties you need.
+              </p>
+            </article>
+          </StaggerItem>
+          <StaggerItem>
+            <article className="motion-card">
+              <span>2</span>
+              <h3>Confirm the details</h3>
+              <p>
+                We confirm sizing, quantity, location, delivery, and transplanting
+                needs with current pricing.
+              </p>
+            </article>
+          </StaggerItem>
+          <StaggerItem>
+            <article className="motion-card">
+              <span>3</span>
+              <h3>Schedule the job</h3>
+              <p>
+                After pricing is approved, we schedule pickup, delivery, or
+                transplanting.
+              </p>
+            </article>
+          </StaggerItem>
+        </StaggerContainer>
+      </ScrollReveal>
 
-      <section className="section cta-panel">
+      <ScrollReveal as="section" className="section cta-panel">
         <div>
           <p className="eyebrow">Ready to get started</p>
           <h2>Contact us for current pricing and availability.</h2>
@@ -175,10 +194,10 @@ export default function HomePage() {
             transplanting photos.
           </p>
         </div>
-        <Link className="button primary" href="/contact">
+        <MotionButton className="button primary" href="/contact">
           Request Pricing
-        </Link>
-      </section>
+        </MotionButton>
+      </ScrollReveal>
     </PublicLayout>
   );
 }

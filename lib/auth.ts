@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import type { Profile, UserRole } from "@/lib/types";
 
 export async function getCurrentProfile() {

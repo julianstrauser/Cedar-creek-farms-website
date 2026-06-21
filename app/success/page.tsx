@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PublicLayout from "@/components/PublicLayout";
+import { MotionButton, ScrollReveal } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Request Received",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function SuccessPage() {
   return (
     <PublicLayout>
-      <section className="page-hero compact">
+      <ScrollReveal as="section" className="page-hero compact">
         <p className="eyebrow">Request received</p>
         <h1>Thank you — your pricing request was sent.</h1>
         <p>
@@ -19,14 +19,14 @@ export default function SuccessPage() {
           directly from the Contact page.
         </p>
         <div className="hero-actions">
-          <Link className="button primary" href="/inventory">
+          <MotionButton className="button primary" href="/inventory">
             Back to Availability
-          </Link>
-          <Link className="button secondary" href="/contact">
+          </MotionButton>
+          <MotionButton className="button secondary" href="/contact">
             Contact Us
-          </Link>
+          </MotionButton>
         </div>
-      </section>
+      </ScrollReveal>
     </PublicLayout>
   );
 }

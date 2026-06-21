@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { Product } from "@/lib/types";
 import { TreeCard } from "@/components/FeaturedTrees";
 import { useInquiry } from "@/components/InquiryProvider";
+import MotionButton from "@/components/motion/MotionButton";
+import { StaggerContainer, StaggerItem } from "@/components/motion/Stagger";
+import ScrollReveal from "@/components/motion/ScrollReveal";
+import { LoadingPulse, TreeCardSkeleton } from "@/components/motion/LoadingSkeleton";
 
 export default function InventoryView() {
   const { items, addItem, clearItems } = useInquiry();
@@ -15,6 +18,7 @@ export default function InventoryView() {
   const [size, setSize] = useState("all");
   const [status, setStatus] = useState("Loading inventory...");
   const [loadError, setLoadError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -28,9 +32,11 @@ export default function InventoryView() {
       if (error) {
         setLoadError(true);
         setStatus("Inventory could not be loaded.");
+        setLoading(false);
         return;
       }
       setTrees((data as Product[]) ?? []);
+      setLoading(false);
     }
     load();
   }, []);
@@ -58,14 +64,15 @@ export default function InventoryView() {
 
   useEffect(() => {
     if (loadError) return;
+    if (loading) return;
     setStatus(`${filtered.length} of ${trees.length} trees shown`);
-  }, [filtered.length, trees.length, loadError]);
+  }, [filtered.length, trees.length, loadError, loading]);
 
   const countText =
     items.length === 1 ? "1 tree selected" : `${items.length} trees selected`;
 
   return (
-    <section className="section inventory-layout">
+    <ScrollReveal as="section" className="section inventory-layout">
       <aside className="filters" aria-label="Inventory filters">
         <label htmlFor="tree-search">Search trees</label>
         <input
@@ -101,7 +108,7 @@ export default function InventoryView() {
             </option>
           ))}
         </select>
-        <button
+        <MotionButton
           className="button secondary full"
           type="button"
           onClick={() => {
@@ -111,34 +118,40 @@ export default function InventoryView() {
           }}
         >
           Clear Filters
-        </button>
+        </MotionButton>
         <div className="inquiry-box">
           <h2>Inquiry list</h2>
           <p>{countText}</p>
-          <Link className="button primary full" href="/contact">
+          <MotionButton className="button primary full" href="/contact">
             Request Pricing
-          </Link>
-          <button className="button ghost full" type="button" onClick={clearItems}>
+          </MotionButton>
+          <MotionButton className="button ghost full" type="button" onClick={clearItems}>
             Clear List
-          </button>
+          </MotionButton>
         </div>
       </aside>
 
       <div>
         <div className="inventory-topline">
-          <p>{status}</p>
+          {loading ? <LoadingPulse label="Loading inventory" /> : <p>{status}</p>}
           <p className="muted">Availability is managed in the owner admin dashboard.</p>
         </div>
-        <div className="tree-grid">
-          {filtered.map((tree) => (
-            <TreeCard
-              key={tree.id}
-              tree={tree}
-              onAddToQuote={() => addItem(tree)}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="tree-grid">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <TreeCardSkeleton key={index} />
+            ))}
+          </div>
+        ) : (
+          <StaggerContainer className="tree-grid" key={`${search}-${type}-${size}`}>
+            {filtered.map((tree) => (
+              <StaggerItem key={tree.id}>
+                <TreeCard tree={tree} onAddToQuote={() => addItem(tree)} />
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        )}
       </div>
-    </section>
+    </ScrollReveal>
   );
 }

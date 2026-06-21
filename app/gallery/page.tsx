@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PublicLayout from "@/components/PublicLayout";
 import GalleryView from "@/components/GalleryView";
+import { ScrollReveal } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Project Gallery",
@@ -10,17 +11,17 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <PublicLayout>
-      <section className="page-hero compact">
+      <ScrollReveal as="section" className="page-hero compact">
         <p className="eyebrow">Photos and recent work</p>
         <h1>Gallery</h1>
         <p>
           Farm photos, tree rows, installed trees, before-and-after projects, and
           equipment photos.
         </p>
-      </section>
-      <section className="section">
+      </ScrollReveal>
+      <ScrollReveal as="section" className="section">
         <GalleryView />
-      </section>
+      </ScrollReveal>
     </PublicLayout>
   );
 }

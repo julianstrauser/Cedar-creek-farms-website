@@ -4,6 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  HamburgerIcon,
+  NavLink,
+} from "@/components/motion";
+import {
+  mobileMenuItemVariants,
+  mobileMenuVariants,
+} from "@/lib/motion/variants";
 
 const links = [
   { href: "/", label: "Home" },
@@ -16,6 +25,7 @@ const links = [
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const reduced = useReducedMotion();
 
   return (
     <header className="site-header">
@@ -27,23 +37,74 @@ export default function SiteHeader() {
         className="menu-button"
         aria-expanded={open}
         aria-controls="main-nav"
+        aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((value) => !value)}
         type="button"
       >
-        Menu
+        <HamburgerIcon open={open} />
+        <span className="menu-button-label">Menu</span>
       </button>
-      <nav id="main-nav" className={`main-nav${open ? " open" : ""}`}>
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            aria-current={pathname === link.href ? "page" : undefined}
-            onClick={() => setOpen(false)}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
+      {reduced ? (
+        <nav id="main-nav" className={`main-nav${open ? " open" : ""}`}>
+          {links.map((link) => (
+            <NavLink
+              key={link.href}
+              href={link.href}
+              active={pathname === link.href}
+              onClick={() => setOpen(false)}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+      ) : (
+        <>
+          <nav id="main-nav" className="main-nav desktop-nav" aria-label="Main">
+            {links.map((link) => (
+              <NavLink
+                key={link.href}
+                href={link.href}
+                active={pathname === link.href}
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+          <AnimatePresence>
+            {open ? (
+              <motion.nav
+                id="main-nav-mobile"
+                className="main-nav mobile-nav open"
+                aria-label="Main"
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={mobileMenuVariants}
+              >
+                {links.map((link) => (
+                  <motion.div key={link.href} variants={mobileMenuItemVariants}>
+                    <NavLink
+                      href={link.href}
+                      active={pathname === link.href}
+                      onClick={() => setOpen(false)}
+                    >
+                      {link.label}
+                    </NavLink>
+                  </motion.div>
+                ))}
+              </motion.nav>
+            ) : null}
+          </AnimatePresence>
+        </>
+      )}
+      {open ? (
+        <button
+          type="button"
+          className="mobile-nav-backdrop"
+          aria-label="Close menu"
+          onClick={() => setOpen(false)}
+        />
+      ) : null}
     </header>
   );
 }

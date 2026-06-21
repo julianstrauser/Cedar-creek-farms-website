@@ -6,6 +6,10 @@ import type { Product } from "@/lib/types";
 import { availabilityLabel, formatPrice } from "@/lib/utils";
 import { PRICING_HELPER_TEXT, pricingInquiryMailto } from "@/lib/contact";
 import SiteImage from "@/components/SiteImage";
+import MotionCard from "@/components/motion/MotionCard";
+import MotionButton from "@/components/motion/MotionButton";
+import { StaggerContainer, StaggerItem } from "@/components/motion/Stagger";
+import { LoadingPulse, TreeGridSkeleton } from "@/components/motion/LoadingSkeleton";
 
 function TreeCard({
   tree,
@@ -17,15 +21,17 @@ function TreeCard({
   onAddToQuote?: () => void;
 }) {
   return (
-    <article className="tree-card">
-      <SiteImage
-        className="tree-card-image"
-        src={tree.image_url || "/assets/logo.svg"}
-        alt={tree.name}
-        width={640}
-        height={400}
-        sizes="(max-width: 720px) 100vw, 50vw"
-      />
+    <MotionCard className="tree-card">
+      <div className="tree-card-image-wrap">
+        <SiteImage
+          className="tree-card-image"
+          src={tree.image_url || "/assets/logo.svg"}
+          alt={tree.name}
+          width={640}
+          height={400}
+          sizes="(max-width: 720px) 100vw, 50vw"
+        />
+      </div>
       <div className="tree-card-body">
         <h3>{tree.name}</h3>
         <p>{tree.description}</p>
@@ -44,27 +50,32 @@ function TreeCard({
         <div className="tree-card-contact">
           <div className="tree-card-actions">
             {!compact && onAddToQuote && tree.availability === "available" ? (
-              <button className="button secondary" type="button" onClick={onAddToQuote}>
+              <MotionButton
+                className="button secondary"
+                type="button"
+                onClick={onAddToQuote}
+              >
                 Add to Quote
-              </button>
+              </MotionButton>
             ) : null}
-            <a
+            <MotionButton
               className="button primary"
               href={pricingInquiryMailto(tree.name)}
             >
               Contact for Pricing
-            </a>
+            </MotionButton>
           </div>
           <p className="tree-card-helper">{PRICING_HELPER_TEXT}</p>
         </div>
       </div>
-    </article>
+    </MotionCard>
   );
 }
 
 export default function FeaturedTrees() {
   const [trees, setTrees] = useState<Product[]>([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -79,12 +90,23 @@ export default function FeaturedTrees() {
 
       if (fetchError) {
         setError(true);
+        setLoading(false);
         return;
       }
       setTrees((data as Product[]) ?? []);
+      setLoading(false);
     }
     load();
   }, []);
+
+  if (loading) {
+    return (
+      <>
+        <LoadingPulse label="Loading featured trees" />
+        <TreeGridSkeleton count={3} />
+      </>
+    );
+  }
 
   if (error) {
     return <p className="muted">Featured trees could not be loaded.</p>;
@@ -95,11 +117,13 @@ export default function FeaturedTrees() {
   }
 
   return (
-    <div className="cards-row">
+    <StaggerContainer className="cards-row">
       {trees.map((tree) => (
-        <TreeCard key={tree.id} tree={tree} compact />
+        <StaggerItem key={tree.id}>
+          <TreeCard tree={tree} compact />
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerContainer>
   );
 }
 

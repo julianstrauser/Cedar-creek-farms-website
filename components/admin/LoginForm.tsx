@@ -1,9 +1,13 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginWithMagicLink, loginWithPassword } from "@/app/admin/login/actions";
 import { createClient } from "@/lib/supabase/client";
+import MotionButton from "@/components/motion/MotionButton";
+import { LoadingPulse } from "@/components/motion/LoadingSkeleton";
+import { fadeUpVariants } from "@/lib/motion/variants";
 
 function isRedirectError(error: unknown) {
   return (
@@ -18,12 +22,14 @@ function isRedirectError(error: unknown) {
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const reduced = useReducedMotion();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"password" | "magic">("password");
   const [message, setMessage] = useState<string | null>(null);
   const [messageType, setMessageType] = useState<"error" | "note">("error");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [showTryAgain, setShowTryAgain] = useState(false);
 
   const queryError = searchParams.get("error");
@@ -40,7 +46,10 @@ export default function LoginForm() {
           error: authError,
         } = await supabase.auth.getUser();
 
-        if (cancelled || authError || !user) return;
+        if (cancelled || authError || !user) {
+          setCheckingSession(false);
+          return;
+        }
 
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
@@ -48,14 +57,21 @@ export default function LoginForm() {
           .eq("id", user.id)
           .maybeSingle();
 
-        if (cancelled || profileError) return;
+        if (cancelled || profileError) {
+          setCheckingSession(false);
+          return;
+        }
 
         if (profile?.role === "admin") {
           router.replace(next);
           router.refresh();
+          return;
         }
+
+        setCheckingSession(false);
       } catch (error) {
         console.error("[admin login] session check failed:", error);
+        setCheckingSession(false);
       }
     }
 
@@ -137,8 +153,27 @@ export default function LoginForm() {
         ? "The sign-in link expired or was invalid. Please request a new one."
         : null;
 
+  if (checkingSession) {
+    return (
+      <div className="admin-login-card">
+        <LoadingPulse label="Checking sign-in status" />
+      </div>
+    );
+  }
+
+  const Card = reduced ? "div" : motion.div;
+
   return (
-    <div className="admin-login-card">
+    <Card
+      className="admin-login-card"
+      {...(!reduced
+        ? {
+            initial: "hidden",
+            animate: "visible",
+            variants: fadeUpVariants,
+          }
+        : {})}
+    >
       <p className="admin-eyebrow">Owner access only</p>
       <h1>Admin sign in</h1>
       <p className="muted">
@@ -152,7 +187,7 @@ export default function LoginForm() {
       ) : null}
 
       <div className="admin-toggle-row">
-        <button
+        <MotionButton
           type="button"
           className={mode === "password" ? "active" : ""}
           onClick={() => {
@@ -161,8 +196,8 @@ export default function LoginForm() {
           }}
         >
           Email & password
-        </button>
-        <button
+        </MotionButton>
+        <MotionButton
           type="button"
           className={mode === "magic" ? "active" : ""}
           onClick={() => {
@@ -171,7 +206,7 @@ export default function LoginForm() {
           }}
         >
           Magic link
-        </button>
+        </MotionButton>
       </div>
 
       <form onSubmit={mode === "password" ? handlePasswordLogin : handleMagicLink}>
@@ -199,21 +234,21 @@ export default function LoginForm() {
             />
           </label>
         ) : null}
-        <button className="button primary full" type="submit" disabled={loading}>
+        <MotionButton className="button primary full" type="submit" disabled={loading}>
           {loading ? "Please wait..." : mode === "password" ? "Sign in" : "Send magic link"}
-        </button>
+        </MotionButton>
       </form>
 
       {showTryAgain ? (
-        <button
+        <MotionButton
           type="button"
           className="button secondary full"
           onClick={clearStatus}
           disabled={loading}
         >
           Try again
-        </button>
+        </MotionButton>
       ) : null}
-    </div>
+    </Card>
   );
 }

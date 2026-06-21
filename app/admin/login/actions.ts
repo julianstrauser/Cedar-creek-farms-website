@@ -1,7 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
+import {
+  getSupabaseConfigErrorMessage,
+  getSupabaseConfigStatus,
+  isSupabaseConfigured,
+} from "@/lib/supabase/env";
 
 function isRedirectError(error: unknown) {
   return (
@@ -14,8 +19,8 @@ function isRedirectError(error: unknown) {
 }
 
 export async function loginWithPassword(email: string, password: string) {
-  if (!isSupabaseConfigured()) {
-    return { error: "Supabase is not configured on this site." };
+  if (!isSupabaseConfigured("server")) {
+    return { error: getSupabaseConfigErrorMessage("server") };
   }
 
   try {
@@ -65,8 +70,8 @@ export async function loginWithPassword(email: string, password: string) {
 }
 
 export async function loginWithMagicLink(email: string, origin: string) {
-  if (!isSupabaseConfigured()) {
-    return { error: "Supabase is not configured on this site." };
+  if (!isSupabaseConfigured("server")) {
+    return { error: getSupabaseConfigErrorMessage("server") };
   }
 
   try {
@@ -95,4 +100,15 @@ export async function loginWithMagicLink(email: string, origin: string) {
     console.error("[admin login] magic link unexpected error:", error);
     return { error: "Unable to send the sign-in link. Please try again." };
   }
+}
+
+/** Development-only: reports whether server env vars are present (never returns key values). */
+export async function getSupabaseConfigDiagnostic() {
+  if (process.env.NODE_ENV !== "development") {
+    return null;
+  }
+
+  return {
+    server: getSupabaseConfigStatus("server"),
+  };
 }

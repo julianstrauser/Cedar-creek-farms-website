@@ -13,6 +13,7 @@ import {
   contactEmailHref,
   contactPhoneHref,
 } from "@/lib/contact";
+import MotionButton from "@/components/motion/MotionButton";
 
 export default function ContactForm() {
   const router = useRouter();
@@ -101,9 +102,9 @@ export default function ContactForm() {
           placeholder="Share quantity, delivery location, timeline, or any other details."
         />
       </label>
-      <button className="button primary" type="submit" disabled={submitting}>
+      <MotionButton className="button primary" type="submit" disabled={submitting}>
         {submitting ? "Sending..." : "Request Pricing"}
-      </button>
+      </MotionButton>
       <p className="form-note">
         Your request is sent privately to Cedar Creek Farms. We will follow up
         with current pricing and availability.

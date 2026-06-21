@@ -40,18 +40,47 @@ Copy `.env.example` to `.env.local`:
 cp .env.example .env.local
 ```
 
-Fill in values from Supabase **Project Settings → API**:
+Fill in values from Supabase **Project Settings → API**. Use the same project URL and anon key for both public and server pairs:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-- `NEXT_PUBLIC_*` values are safe for the browser.
-- **Never** expose `SUPABASE_SERVICE_ROLE_KEY` in client code. It is only needed for one-time admin setup scripts if you use them.
+- **Browser/client code** only reads `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- **Server code** reads `SUPABASE_URL` and `SUPABASE_ANON_KEY` first, then falls back to the `NEXT_PUBLIC_*` values.
+- **Admin login** only requires the project URL and anon key — **not** the service role key.
+- **Never** expose `SUPABASE_SERVICE_ROLE_KEY` in client code. It is optional and only for one-time admin setup scripts if you use them.
+- **Never commit** `.env.local` — it is listed in `.gitignore`.
 
-Add the same variables in **Vercel** (or your host) under **Environment Variables** when you deploy.
+---
+
+## Vercel Environment Variables
+
+When deploying to Vercel, add all five variables in **Vercel → Project Settings → Environment Variables** and enable them for **Production**.
+
+Import template (replace the placeholder key values with your real keys from Supabase **Project Settings → API**):
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://omnvuyxgbqmkalpieout.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=PASTE_ANON_KEY_HERE
+SUPABASE_URL=https://omnvuyxgbqmkalpieout.supabase.co
+SUPABASE_ANON_KEY=PASTE_SAME_ANON_KEY_HERE
+SUPABASE_SERVICE_ROLE_KEY=PASTE_SERVICE_ROLE_KEY_HERE
+```
+
+Notes:
+
+- `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_URL` must be the same Supabase project URL.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_ANON_KEY` must be the same anon (public) key.
+- `SUPABASE_SERVICE_ROLE_KEY` is the service role key and must **never** be exposed to the browser. It is **not** required for admin login.
+- `NEXT_PUBLIC_*` values are embedded at **build time**. After saving variables in Vercel, trigger a **fresh Production redeploy**.
+- Use **Redeploy without build cache** — do not just refresh the live site.
+
+If login still fails after deploy, open `/admin/login` and check the **Supabase environment check** panel. It shows `set` / `missing` for each variable name (never the actual key values).
 
 ---
 
@@ -120,8 +149,8 @@ This project is a Next.js app. **Vercel** is the recommended host.
 
 1. Push the repo to GitHub.
 2. Import the project in [vercel.com](https://vercel.com).
-3. Add the three Supabase environment variables.
-4. Deploy.
+3. Add all five Supabase environment variables (see **Vercel Environment Variables** above).
+4. Deploy, then redeploy without build cache if you change any `NEXT_PUBLIC_*` values.
 
 After deploy, set the Supabase **Site URL** and **Redirect URLs**:
 

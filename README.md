@@ -35,6 +35,8 @@ npm run dev
 
 Recommended: **Vercel** with the Supabase environment variables from `.env.example`.
 
+See **[SUPABASE_SETUP.md → Vercel Environment Variables](./SUPABASE_SETUP.md#vercel-environment-variables)** for the exact Production import template and redeploy steps.
+
 Netlify is also supported via `@netlify/plugin-nextjs` (see `netlify.toml`).
 
 ## Legacy static files

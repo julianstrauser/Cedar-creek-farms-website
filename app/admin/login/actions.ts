@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   getSupabaseConfigErrorMessage,
-  getSupabaseConfigStatus,
+  getSupabaseEnvDiagnostic,
   isSupabaseConfigured,
 } from "@/lib/supabase/env";
 
@@ -102,13 +102,7 @@ export async function loginWithMagicLink(email: string, origin: string) {
   }
 }
 
-/** Development-only: reports whether server env vars are present (never returns key values). */
+/** Safe diagnostics for admin login troubleshooting (never returns key values). */
 export async function getSupabaseConfigDiagnostic() {
-  if (process.env.NODE_ENV !== "development") {
-    return null;
-  }
-
-  return {
-    server: getSupabaseConfigStatus("server"),
-  };
+  return getSupabaseEnvDiagnostic();
 }

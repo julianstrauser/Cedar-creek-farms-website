@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import LoginForm from "@/components/admin/LoginForm";
+import SupabaseEnvDiagnosticPanel from "@/components/admin/SupabaseEnvDiagnosticPanel";
 import { LoginSkeleton } from "@/components/motion/LoadingSkeleton";
 
 export const metadata: Metadata = {
@@ -11,9 +12,12 @@ export const metadata: Metadata = {
 export default function AdminLoginPage() {
   return (
     <div className="admin-login-page">
-      <Suspense fallback={<LoginSkeleton />}>
-        <LoginForm />
-      </Suspense>
+      <div className="admin-login-stack">
+        <Suspense fallback={<LoginSkeleton />}>
+          <LoginForm />
+        </Suspense>
+        <SupabaseEnvDiagnosticPanel />
+      </div>
     </div>
   );
 }

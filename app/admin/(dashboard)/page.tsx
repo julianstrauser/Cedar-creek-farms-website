@@ -1,8 +1,13 @@
 import Link from "next/link";
+import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Order, Product } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboardPage() {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   const [productsResult, ordersResult] = await Promise.all([

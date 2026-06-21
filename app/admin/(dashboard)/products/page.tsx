@@ -1,5 +1,9 @@
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
+import { requireAdmin } from "@/lib/auth";
 
-export default function AdminProductsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AdminProductsPage() {
+  await requireAdmin();
   return <ProductsAdmin />;
 }

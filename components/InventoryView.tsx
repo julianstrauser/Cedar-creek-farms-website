@@ -10,12 +10,55 @@ import { StaggerContainer, StaggerItem } from "@/components/motion/Stagger";
 import ScrollReveal from "@/components/motion/ScrollReveal";
 import { LoadingPulse, TreeCardSkeleton } from "@/components/motion/LoadingSkeleton";
 
+type ChipFilter =
+  | "all"
+  | "shade"
+  | "privacy"
+  | "ornamental"
+  | "available"
+  | "sold_out"
+  | "featured";
+
+const CHIP_FILTERS: { id: ChipFilter; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "shade", label: "Shade Trees" },
+  { id: "privacy", label: "Privacy Trees" },
+  { id: "ornamental", label: "Ornamental Trees" },
+  { id: "available", label: "Available Now" },
+  { id: "sold_out", label: "Sold Out" },
+  { id: "featured", label: "Featured" },
+];
+
+function matchesChip(tree: Product, chip: ChipFilter) {
+  const category = (tree.category ?? "").toLowerCase();
+
+  switch (chip) {
+    case "all":
+      return true;
+    case "shade":
+      return category.includes("shade");
+    case "privacy":
+      return category.includes("privacy");
+    case "ornamental":
+      return category.includes("ornamental");
+    case "available":
+      return tree.availability === "available";
+    case "sold_out":
+      return tree.availability === "sold_out";
+    case "featured":
+      return tree.featured;
+    default:
+      return true;
+  }
+}
+
 export default function InventoryView() {
   const { items, addItem, clearItems } = useInquiry();
   const [trees, setTrees] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [size, setSize] = useState("all");
+  const [chip, setChip] = useState<ChipFilter>("all");
   const [status, setStatus] = useState("Loading inventory...");
   const [loadError, setLoadError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -53,14 +96,15 @@ export default function InventoryView() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return trees.filter((tree) => {
-      const text = `${tree.name} ${tree.category ?? ""} ${tree.size ?? ""} ${tree.description ?? ""}`.toLowerCase();
+      const text = `${tree.name} ${tree.common_name ?? ""} ${tree.category ?? ""} ${tree.size ?? ""} ${tree.description ?? ""} ${tree.best_use ?? ""}`.toLowerCase();
       return (
         (!q || text.includes(q)) &&
         (type === "all" || tree.category === type) &&
-        (size === "all" || tree.size === size)
+        (size === "all" || tree.size === size) &&
+        matchesChip(tree, chip)
       );
     });
-  }, [trees, search, type, size]);
+  }, [trees, search, type, size, chip]);
 
   useEffect(() => {
     if (loadError) return;
@@ -115,6 +159,7 @@ export default function InventoryView() {
             setSearch("");
             setType("all");
             setSize("all");
+            setChip("all");
           }}
         >
           Clear Filters
@@ -132,9 +177,20 @@ export default function InventoryView() {
       </aside>
 
       <div>
+        <div className="inventory-chip-filter" role="group" aria-label="Quick filters">
+          {CHIP_FILTERS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={chip === item.id ? "active" : ""}
+              onClick={() => setChip(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
         <div className="inventory-topline">
           {loading ? <LoadingPulse label="Loading inventory" /> : <p>{status}</p>}
-          <p className="muted">Availability is managed in the owner admin dashboard.</p>
         </div>
         {loading ? (
           <div className="tree-grid">
@@ -142,8 +198,12 @@ export default function InventoryView() {
               <TreeCardSkeleton key={index} />
             ))}
           </div>
+        ) : loadError ? (
+          <p className="muted">Tree availability could not be loaded at this time.</p>
+        ) : filtered.length === 0 ? (
+          <p className="muted">No trees match your current filters.</p>
         ) : (
-          <StaggerContainer className="tree-grid" key={`${search}-${type}-${size}`}>
+          <StaggerContainer className="tree-grid" key={`${search}-${type}-${size}-${chip}`}>
             {filtered.map((tree) => (
               <StaggerItem key={tree.id}>
                 <TreeCard tree={tree} onAddToQuote={() => addItem(tree)} />

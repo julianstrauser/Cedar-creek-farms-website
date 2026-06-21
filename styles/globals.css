@@ -596,6 +596,23 @@ textarea { resize: vertical; }
   line-height: 1.5;
 }
 
+.tree-card-detail {
+  margin: 0.65rem 0 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.tree-card-specs {
+  margin: 0.65rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.tree-card-specs li {
+  margin-bottom: 0.25rem;
+}
+
 .availability-section {
   display: grid;
   gap: 1.2rem;
@@ -631,6 +648,28 @@ textarea { resize: vertical; }
   cursor: pointer;
 }
 .gallery-filter button.active { background: var(--green-800); color: var(--white); }
+
+.inventory-chip-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.inventory-chip-filter button {
+  border: 1px solid rgba(23,59,47,.15);
+  background: var(--white);
+  border-radius: 999px;
+  padding: .7rem 1rem;
+  font-weight: 900;
+  color: var(--green-900);
+  cursor: pointer;
+}
+
+.inventory-chip-filter button.active {
+  background: var(--green-800);
+  color: var(--white);
+}
 .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .gallery-card { overflow: hidden; cursor: pointer; text-align: left; padding: 0; border: 1px solid rgba(23, 59, 47, 0.12); }
 .gallery-card img,
@@ -691,6 +730,62 @@ textarea { resize: vertical; }
 .footer-contact a { color: var(--green-800); font-weight: 700; text-decoration: underline; text-underline-offset: 0.12em; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
 .footer-links a { color: var(--green-900); font-weight: 800; text-decoration: none; }
+
+.footer-service-area {
+  margin: 0.15rem 0 0;
+}
+
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.footer-social a {
+  color: var(--green-800);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.faq-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.faq-item {
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(23, 59, 47, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 0.35rem 1rem;
+  box-shadow: 0 12px 30px rgba(14, 40, 29, 0.05);
+}
+
+.faq-item summary {
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--green-950);
+  padding: 0.75rem 0;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.service-area-section.compact {
+  padding-top: 0;
+}
+
+.service-area-section.compact h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
 
 @media (max-width: 950px) {
   .hero,
@@ -892,6 +987,10 @@ textarea { resize: vertical; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.admin-form-full {
+  grid-column: 1 / -1;
 }
 
 .admin-checkbox {

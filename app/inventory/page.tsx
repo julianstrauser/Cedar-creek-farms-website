@@ -5,7 +5,8 @@ import { ScrollReveal } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Tree Availability",
-  description: "Browse current tree availability by variety, size, type, and notes.",
+  description:
+    "Browse current shade trees, ornamental trees, privacy trees, and seasonal availability at Cedar Creek Farms.",
 };
 
 export default function InventoryPage() {

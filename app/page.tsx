@@ -1,5 +1,7 @@
 import PublicLayout from "@/components/PublicLayout";
 import FeaturedTrees from "@/components/FeaturedTrees";
+import FaqSection from "@/components/FaqSection";
+import ServiceAreaSection from "@/components/ServiceAreaSection";
 import {
   MotionButton,
   ScrollReveal,
@@ -198,6 +200,9 @@ export default function HomePage() {
           Request Pricing
         </MotionButton>
       </ScrollReveal>
+
+      <ServiceAreaSection />
+      <FaqSection />
     </PublicLayout>
   );
 }

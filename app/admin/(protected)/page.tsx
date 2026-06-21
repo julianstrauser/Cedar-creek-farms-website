@@ -74,6 +74,10 @@ export default async function AdminDashboardPage() {
           <h2>Orders</h2>
           <p>Review quote requests and track follow-up status.</p>
         </Link>
+        <Link className="admin-card-link" href="/admin/settings">
+          <h2>Settings</h2>
+          <p>Update contact info, service area, and footer details.</p>
+        </Link>
       </div>
     </div>
   );

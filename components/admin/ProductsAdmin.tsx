@@ -8,11 +8,16 @@ import SiteImage from "@/components/SiteImage";
 
 const emptyProduct = {
   name: "",
+  common_name: "",
   description: "",
   price: "Call for pricing",
   size: "",
   category: "",
   image_url: "",
+  best_use: "",
+  sun_needs: "",
+  water_needs: "",
+  mature_size: "",
   availability: "available" as ProductAvailability,
   sort_order: 0,
   featured: false,
@@ -50,11 +55,16 @@ export default function ProductsAdmin() {
     setEditing(product);
     setForm({
       name: product.name,
+      common_name: product.common_name ?? "",
       description: product.description ?? "",
       price: product.price ?? "",
       size: product.size ?? "",
       category: product.category ?? "",
       image_url: product.image_url ?? "",
+      best_use: product.best_use ?? "",
+      sun_needs: product.sun_needs ?? "",
+      water_needs: product.water_needs ?? "",
+      mature_size: product.mature_size ?? "",
       availability: product.availability,
       sort_order: product.sort_order,
       featured: product.featured,
@@ -82,11 +92,16 @@ export default function ProductsAdmin() {
     const supabase = createClient();
     const payload = {
       name: form.name.trim(),
+      common_name: form.common_name.trim() || null,
       description: form.description.trim() || null,
       price: form.price.trim() || null,
       size: form.size.trim() || null,
       category: form.category.trim() || null,
       image_url: form.image_url.trim() || null,
+      best_use: form.best_use.trim() || null,
+      sun_needs: form.sun_needs.trim() || null,
+      water_needs: form.water_needs.trim() || null,
+      mature_size: form.mature_size.trim() || null,
       availability: form.availability,
       sort_order: Number(form.sort_order) || 0,
       featured: form.featured,
@@ -158,6 +173,13 @@ export default function ProductsAdmin() {
               />
             </label>
             <label>
+              Common name
+              <input
+                value={form.common_name}
+                onChange={(event) => setForm({ ...form, common_name: event.target.value })}
+              />
+            </label>
+            <label>
               Category
               <input
                 value={form.category}
@@ -215,6 +237,36 @@ export default function ProductsAdmin() {
               }
             />
           </label>
+          <div className="admin-form-grid">
+            <label>
+              Best use
+              <input
+                value={form.best_use}
+                onChange={(event) => setForm({ ...form, best_use: event.target.value })}
+              />
+            </label>
+            <label>
+              Mature size
+              <input
+                value={form.mature_size}
+                onChange={(event) => setForm({ ...form, mature_size: event.target.value })}
+              />
+            </label>
+            <label>
+              Sun needs
+              <input
+                value={form.sun_needs}
+                onChange={(event) => setForm({ ...form, sun_needs: event.target.value })}
+              />
+            </label>
+            <label>
+              Water needs
+              <input
+                value={form.water_needs}
+                onChange={(event) => setForm({ ...form, water_needs: event.target.value })}
+              />
+            </label>
+          </div>
           <label className="admin-checkbox">
             <input
               type="checkbox"

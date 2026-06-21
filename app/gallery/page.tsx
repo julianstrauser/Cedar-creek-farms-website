@@ -4,8 +4,9 @@ import GalleryView from "@/components/GalleryView";
 import { ScrollReveal } from "@/components/motion";
 
 export const metadata: Metadata = {
-  title: "Project Gallery",
-  description: "Tree farm photos, installed trees, transplanting projects, and farm rows.",
+  title: "Tree Farm & Transplanting Gallery",
+  description:
+    "Photos of tree farm rows, installed trees, transplanting projects, and equipment at Cedar Creek Farms.",
 };
 
 export default function GalleryPage() {

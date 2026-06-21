@@ -2,10 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import {
-  getSupabaseConfigErrorMessage,
-  isSupabaseConfigured,
-} from "@/lib/supabase/env";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 function isRedirectError(error: unknown) {
   return (
@@ -17,9 +14,20 @@ function isRedirectError(error: unknown) {
   );
 }
 
+function friendlyAuthError(message: string) {
+  const lower = message.toLowerCase();
+  if (lower.includes("invalid login credentials") || lower.includes("invalid email or password")) {
+    return "Invalid email or password.";
+  }
+  if (lower.includes("email not confirmed")) {
+    return "Please confirm your email before signing in.";
+  }
+  return "Unable to sign in right now. Please try again.";
+}
+
 export async function loginWithPassword(email: string, password: string) {
   if (!isSupabaseConfigured("server")) {
-    return { error: getSupabaseConfigErrorMessage("server") };
+    return { error: "Unable to sign in right now. Please try again." };
   }
 
   try {
@@ -31,11 +39,11 @@ export async function loginWithPassword(email: string, password: string) {
 
     if (error) {
       console.error("[admin login] signInWithPassword failed:", error.message);
-      return { error: error.message };
+      return { error: friendlyAuthError(error.message) };
     }
 
     if (!data.user) {
-      return { error: "Sign in failed. Please try again." };
+      return { error: "Unable to sign in right now. Please try again." };
     }
 
     const { data: profile, error: profileError } = await supabase
@@ -53,7 +61,7 @@ export async function loginWithPassword(email: string, password: string) {
     if (profile?.role !== "admin") {
       await supabase.auth.signOut();
       return {
-        error: "This account is not approved as an admin. Contact the site developer.",
+        error: "This account does not have admin access.",
       };
     }
 
@@ -70,7 +78,7 @@ export async function loginWithPassword(email: string, password: string) {
 
 export async function loginWithMagicLink(email: string, origin: string) {
   if (!isSupabaseConfigured("server")) {
-    return { error: getSupabaseConfigErrorMessage("server") };
+    return { error: "Unable to send the sign-in link right now. Please try again." };
   }
 
   try {
@@ -85,7 +93,7 @@ export async function loginWithMagicLink(email: string, origin: string) {
 
     if (error) {
       console.error("[admin login] signInWithOtp failed:", error.message);
-      return { error: error.message };
+      return { error: friendlyAuthError(error.message) };
     }
 
     return {

@@ -5,11 +5,16 @@ export type UserRole = "admin" | "user";
 export type Product = {
   id: string;
   name: string;
+  common_name: string | null;
   description: string | null;
   price: string | null;
   size: string | null;
   category: string | null;
   image_url: string | null;
+  best_use: string | null;
+  sun_needs: string | null;
+  water_needs: string | null;
+  mature_size: string | null;
   availability: ProductAvailability;
   sort_order: number;
   featured: boolean;
@@ -49,6 +54,20 @@ export type Profile = {
   created_at: string;
 };
 
+export type SiteSettings = {
+  id: string;
+  business_name: string;
+  contact_email: string;
+  phone_display: string | null;
+  phone_tel: string | null;
+  service_area: string;
+  contact_page_intro: string | null;
+  footer_note: string;
+  facebook_url: string | null;
+  instagram_url: string | null;
+  updated_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -84,6 +103,11 @@ export type Database = {
         Row: Profile;
         Insert: Omit<Profile, "created_at"> & { created_at?: string };
         Update: Partial<Profile>;
+      };
+      site_settings: {
+        Row: SiteSettings;
+        Insert: Omit<SiteSettings, "updated_at"> & { updated_at?: string };
+        Update: Partial<SiteSettings>;
       };
     };
   };

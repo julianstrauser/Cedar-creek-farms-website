@@ -5,10 +5,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginWithMagicLink, loginWithPassword } from "@/app/admin/login/actions";
 import { createClient } from "@/lib/supabase/client";
-import {
-  getSupabaseConfigErrorMessage,
-  isSupabaseConfigured,
-} from "@/lib/supabase/env";
 import MotionButton from "@/components/motion/MotionButton";
 import { LoadingPulse } from "@/components/motion/LoadingSkeleton";
 import { fadeUpVariants } from "@/lib/motion/variants";
@@ -43,13 +39,6 @@ export default function LoginForm() {
     let cancelled = false;
 
     async function redirectIfAlreadyAdmin() {
-      if (!isSupabaseConfigured("client")) {
-        setCheckingSession(false);
-        setMessageType("error");
-        setMessage(getSupabaseConfigErrorMessage("client"));
-        return;
-      }
-
       try {
         const supabase = createClient();
         const {

@@ -1,24 +1,15 @@
 import { createBrowserClient } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import {
-  getClientSupabaseEnv,
-  getSupabaseConfigErrorMessage,
-} from "@/lib/supabase/env";
+import { SUPABASE_PUBLIC_CONFIG } from "@/lib/supabase/public-config";
 
 let browserClient: SupabaseClient | undefined;
 
 export function createClient() {
-  const { url, anonKey } = getClientSupabaseEnv();
-
-  if (!url || !anonKey) {
-    throw new Error(
-      getSupabaseConfigErrorMessage("client") ||
-        "Supabase environment variables are not configured."
-    );
-  }
-
   if (!browserClient) {
-    browserClient = createBrowserClient(url, anonKey);
+    browserClient = createBrowserClient(
+      SUPABASE_PUBLIC_CONFIG.url,
+      SUPABASE_PUBLIC_CONFIG.anonKey
+    );
   }
 
   return browserClient;

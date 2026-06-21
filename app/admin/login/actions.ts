@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   getSupabaseConfigErrorMessage,
-  getSupabaseEnvDiagnostic,
   isSupabaseConfigured,
 } from "@/lib/supabase/env";
 
@@ -100,9 +99,4 @@ export async function loginWithMagicLink(email: string, origin: string) {
     console.error("[admin login] magic link unexpected error:", error);
     return { error: "Unable to send the sign-in link. Please try again." };
   }
-}
-
-/** Safe diagnostics for admin login troubleshooting (never returns key values). */
-export async function getSupabaseConfigDiagnostic() {
-  return getSupabaseEnvDiagnostic();
 }

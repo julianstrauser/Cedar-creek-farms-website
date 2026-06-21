@@ -1,3 +1,5 @@
+import { SUPABASE_PUBLIC_CONFIG } from "@/lib/supabase/public-config";
+
 export const SUPABASE_ENV_KEYS = {
   publicUrl: "NEXT_PUBLIC_SUPABASE_URL",
   publicAnonKey: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
@@ -6,56 +8,34 @@ export const SUPABASE_ENV_KEYS = {
   serviceRoleKey: "SUPABASE_SERVICE_ROLE_KEY",
 } as const;
 
-export type SupabaseEnvVarName =
-  | typeof SUPABASE_ENV_KEYS.publicUrl
-  | typeof SUPABASE_ENV_KEYS.publicAnonKey
-  | typeof SUPABASE_ENV_KEYS.serverUrl
-  | typeof SUPABASE_ENV_KEYS.serverAnonKey
-  | typeof SUPABASE_ENV_KEYS.serviceRoleKey;
-
-/**
- * Client env — direct static references only.
- * Next.js inlines NEXT_PUBLIC_* at build time when accessed with dot notation.
- */
-const CLIENT_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "";
-const CLIENT_SUPABASE_ANON_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? "";
-
 export type SupabaseConfigStatus = {
   urlConfigured: boolean;
   anonKeyConfigured: boolean;
 };
 
-export type SupabaseEnvDiagnostic = {
-  vars: Record<SupabaseEnvVarName, boolean>;
-  serverReady: boolean;
-  clientReady: boolean;
-  loginReady: boolean;
-};
-
-/** Browser/client bundle — only NEXT_PUBLIC_* (inlined at build time). */
+/** Browser/client — uses public config with env override baked in at build time. */
 export function getClientSupabaseEnv() {
   return {
-    url: CLIENT_SUPABASE_URL,
-    anonKey: CLIENT_SUPABASE_ANON_KEY,
+    url: SUPABASE_PUBLIC_CONFIG.url,
+    anonKey: SUPABASE_PUBLIC_CONFIG.anonKey,
   };
 }
 
 /**
- * Server runtime — prefers non-public vars (read at runtime on Vercel),
- * then falls back to NEXT_PUBLIC_* (inlined at build time).
+ * Server runtime — prefers server env vars, then public env vars,
+ * then the same hardcoded public config used in the browser.
  * Never reads SUPABASE_SERVICE_ROLE_KEY.
  */
 export function getServerSupabaseEnv() {
   const url =
     process.env.SUPABASE_URL?.trim() ||
     process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
-    "";
+    SUPABASE_PUBLIC_CONFIG.url;
 
   const anonKey =
     process.env.SUPABASE_ANON_KEY?.trim() ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
-    "";
+    SUPABASE_PUBLIC_CONFIG.anonKey;
 
   return { url, anonKey };
 }
@@ -73,30 +53,6 @@ export function getSupabaseConfigStatus(
 export function isSupabaseConfigured(target: "client" | "server" = "server") {
   const status = getSupabaseConfigStatus(target);
   return status.urlConfigured && status.anonKeyConfigured;
-}
-
-/** Safe diagnostics: true/false only, never key values. Uses direct env references. */
-export function getSupabaseEnvDiagnostic(): SupabaseEnvDiagnostic {
-  const clientEnv = getClientSupabaseEnv();
-  const serverEnv = getServerSupabaseEnv();
-
-  return {
-    vars: {
-      [SUPABASE_ENV_KEYS.publicUrl]:
-        (process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "").length > 0,
-      [SUPABASE_ENV_KEYS.publicAnonKey]:
-        (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? "").length > 0,
-      [SUPABASE_ENV_KEYS.serverUrl]:
-        (process.env.SUPABASE_URL?.trim() ?? "").length > 0,
-      [SUPABASE_ENV_KEYS.serverAnonKey]:
-        (process.env.SUPABASE_ANON_KEY?.trim() ?? "").length > 0,
-      [SUPABASE_ENV_KEYS.serviceRoleKey]:
-        (process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? "").length > 0,
-    },
-    serverReady: serverEnv.url.length > 0 && serverEnv.anonKey.length > 0,
-    clientReady: clientEnv.url.length > 0 && clientEnv.anonKey.length > 0,
-    loginReady: serverEnv.url.length > 0 && serverEnv.anonKey.length > 0,
-  };
 }
 
 function missingKeysForTarget(target: "client" | "server"): string[] {
@@ -131,12 +87,10 @@ export function getSupabaseConfigErrorMessage(
   }
 
   const missingList = missing.join(" and ");
-  const redeployHint =
-    "Add the variables in Vercel → Project Settings → Environment Variables (Production), then trigger a fresh Production redeploy using “Redeploy without build cache.” Do not just refresh the site.";
 
   if (target === "server") {
-    return `Supabase is not configured on the server: ${missingList} ${missing.length > 1 ? "are" : "is"} missing or empty. ${redeployHint} Admin login only requires the Supabase project URL and anon key — SUPABASE_SERVICE_ROLE_KEY is not used for login.`;
+    return `Supabase is not configured on the server: ${missingList} ${missing.length > 1 ? "are" : "is"} missing or empty. Admin login only requires the Supabase project URL and anon key.`;
   }
 
-  return `Supabase is not configured in the browser: ${missingList} ${missing.length > 1 ? "are" : "is"} missing or empty. ${redeployHint} NEXT_PUBLIC_* values are baked in at build time. SUPABASE_SERVICE_ROLE_KEY is not used for login.`;
+  return `Supabase is not configured in the browser: ${missingList} ${missing.length > 1 ? "are" : "is"} missing or empty.`;
 }

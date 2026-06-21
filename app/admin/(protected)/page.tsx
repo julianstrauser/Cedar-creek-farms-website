@@ -1,22 +1,29 @@
 import Link from "next/link";
-import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Order, Product } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  await requireAdmin();
+  let products: Pick<Product, "id" | "availability">[] = [];
+  let orders: Pick<Order, "id" | "status">[] = [];
 
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
+    const [productsResult, ordersResult] = await Promise.all([
+      supabase.from("products").select("id, availability"),
+      supabase.from("orders").select("id, status"),
+    ]);
 
-  const [productsResult, ordersResult] = await Promise.all([
-    supabase.from("products").select("id, availability"),
-    supabase.from("orders").select("id, status"),
-  ]);
-
-  const products = (productsResult.data ?? []) as Pick<Product, "id" | "availability">[];
-  const orders = (ordersResult.data ?? []) as Pick<Order, "id" | "status">[];
+    if (!productsResult.error) {
+      products = (productsResult.data ?? []) as Pick<Product, "id" | "availability">[];
+    }
+    if (!ordersResult.error) {
+      orders = (ordersResult.data ?? []) as Pick<Order, "id" | "status">[];
+    }
+  } catch {
+    // Keep empty stats rather than crash the admin dashboard.
+  }
 
   const stats = [
     { label: "Total products", value: products.length },

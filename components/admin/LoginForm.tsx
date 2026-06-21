@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -15,6 +15,33 @@ export default function LoginForm() {
 
   const error = searchParams.get("error");
   const next = searchParams.get("next") || "/admin";
+
+  useEffect(() => {
+    async function redirectIfAlreadyAdmin() {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) return;
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (profile?.role === "admin") {
+          router.replace(next);
+        }
+      } catch {
+        // Stay on the login page if the session check fails.
+      }
+    }
+
+    redirectIfAlreadyAdmin();
+  }, [next, router]);
 
   async function handlePasswordLogin(event: FormEvent) {
     event.preventDefault();

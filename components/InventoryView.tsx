@@ -6,6 +6,7 @@ import type { Product } from "@/lib/types";
 import { TreeCard } from "@/components/FeaturedTrees";
 import { useInquiry } from "@/components/InquiryProvider";
 import MotionButton from "@/components/motion/MotionButton";
+import MotionChip from "@/components/motion/MotionChip";
 import { StaggerContainer, StaggerItem } from "@/components/motion/Stagger";
 import ScrollReveal from "@/components/motion/ScrollReveal";
 import { LoadingPulse, TreeCardSkeleton } from "@/components/motion/LoadingSkeleton";
@@ -179,14 +180,14 @@ export default function InventoryView() {
       <div>
         <div className="inventory-chip-filter" role="group" aria-label="Quick filters">
           {CHIP_FILTERS.map((item) => (
-            <button
+            <MotionChip
               key={item.id}
-              type="button"
-              className={chip === item.id ? "active" : ""}
+              active={chip === item.id}
+              className="inventory-chip"
               onClick={() => setChip(item.id)}
             >
               {item.label}
-            </button>
+            </MotionChip>
           ))}
         </div>
         <div className="inventory-topline">

@@ -41,8 +41,14 @@ export default function NavLink({
       transition={{ duration: DURATION.fast, ease: EASE }}
     >
       {children}
-      {active ? <span className="nav-link-underline active" aria-hidden /> : null}
-      {!active ? (
+      {active ? (
+        <motion.span
+          className="nav-link-underline active"
+          layoutId="nav-active-indicator"
+          aria-hidden
+          transition={{ duration: DURATION.base, ease: EASE }}
+        />
+      ) : (
         <motion.span
           className="nav-link-underline"
           aria-hidden
@@ -50,7 +56,7 @@ export default function NavLink({
           whileHover={{ scaleX: 1 }}
           transition={{ duration: DURATION.base, ease: EASE }}
         />
-      ) : null}
+      )}
     </MotionLink>
   );
 }

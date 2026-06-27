@@ -3,6 +3,11 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE, OFFSET, VIEWPORT } from "@/lib/motion/tokens";
 
+const revealTransition = {
+  duration: DURATION.reveal,
+  ease: EASE,
+} as const;
+
 type ScrollRevealProps = {
   as?: "div" | "section" | "article" | "aside";
   children: React.ReactNode;
@@ -34,7 +39,7 @@ export default function ScrollReveal({
   const baseProps = {
     className,
     initial: { opacity: 0, y: OFFSET },
-    transition: { duration: DURATION.slow, ease: EASE, delay },
+    transition: { ...revealTransition, delay },
   };
 
   const motionProps = priority

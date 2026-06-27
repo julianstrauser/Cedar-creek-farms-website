@@ -5,6 +5,7 @@ import { MotionButton } from "@/components/motion";
 import {
   heroActionsVariants,
   heroContainerVariants,
+  heroEyebrowVariants,
   heroItemVariants,
   heroPanelVariants,
 } from "@/lib/motion/variants";
@@ -18,8 +19,9 @@ export default function HeroSection() {
   if (reduced) {
     return (
       <section className="hero">
+        <div className="hero-ambient" aria-hidden />
         <div className="hero-content">
-          <p className="eyebrow">
+          <p className="eyebrow eyebrow-badge">
             Field-grown trees • Professional transplanting • Reliable availability
           </p>
           <h1>Quality trees grown for landscapes that need to last.</h1>
@@ -43,6 +45,7 @@ export default function HeroSection() {
 
   return (
     <section className="hero">
+      <div className="hero-ambient" aria-hidden />
       <motion.div
         className="hero-glow"
         aria-hidden
@@ -54,7 +57,7 @@ export default function HeroSection() {
         initial="hidden"
         animate="visible"
       >
-        <motion.p className="eyebrow" variants={heroItemVariants}>
+        <motion.p className="eyebrow eyebrow-badge" variants={heroEyebrowVariants}>
           Field-grown trees • Professional transplanting • Reliable availability
         </motion.p>
         <motion.h1 variants={heroItemVariants}>
@@ -91,7 +94,7 @@ function HeroPanelStatic() {
   return (
     <>
       <div className="status-card">
-        <span className="status-dot"></span>
+        <span className="status-dot status-dot-live" aria-hidden />
         <p>Availability updated regularly</p>
       </div>
       <h2>

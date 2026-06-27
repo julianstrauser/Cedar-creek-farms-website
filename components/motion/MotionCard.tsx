@@ -14,10 +14,10 @@ type MotionCardProps = {
 
 const hoverProps = {
   whileHover: {
-    y: -8,
-    boxShadow: "0 28px 50px rgba(14, 40, 29, 0.16)",
+    y: -10,
+    boxShadow: "0 24px 52px rgba(14, 40, 29, 0.18), 0 0 0 1px rgba(31, 83, 63, 0.08)",
   },
-  whileTap: { scale: 0.98, y: -2 },
+  whileTap: { scale: 0.98, y: -3 },
   transition: { duration: DURATION.fast, ease: EASE },
 };
 

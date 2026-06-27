@@ -2,15 +2,15 @@ import type { Variants } from "framer-motion";
 import { DURATION, EASE, OFFSET, STAGGER, STAGGER_OFFSET } from "./tokens";
 
 export const pageVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: EASE },
+    transition: { duration: DURATION.page, ease: EASE },
   },
   exit: {
     opacity: 0,
-    y: -16,
+    y: -12,
     transition: { duration: DURATION.fast, ease: EASE },
   },
 };
@@ -55,14 +55,24 @@ export const heroContainerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.1,
+      staggerChildren: 0.13,
+      delayChildren: 0.08,
     },
   },
 };
 
+export const heroEyebrowVariants: Variants = {
+  hidden: { opacity: 0, y: 28, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: DURATION.reveal, ease: EASE },
+  },
+};
+
 export const heroItemVariants: Variants = {
-  hidden: { opacity: 0, y: 44 },
+  hidden: { opacity: 0, y: 56 },
   visible: {
     opacity: 1,
     y: 0,
@@ -71,21 +81,21 @@ export const heroItemVariants: Variants = {
 };
 
 export const heroActionsVariants: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: DURATION.slow, ease: EASE, delay: 0.05 },
+    transition: { duration: DURATION.slow, ease: EASE, delay: 0.04 },
   },
 };
 
 export const heroPanelVariants: Variants = {
-  hidden: { opacity: 0, y: 48, scale: 0.96 },
+  hidden: { opacity: 0, y: 56, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: EASE, delay: 0.2 },
+    transition: { duration: 0.65, ease: EASE, delay: 0.18 },
   },
 };
 

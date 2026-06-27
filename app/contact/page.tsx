@@ -4,7 +4,7 @@ import ContactForm, { ContactSidebar } from "@/components/ContactForm";
 import FaqSection from "@/components/FaqSection";
 import PageHero from "@/components/PageHero";
 import ServiceAreaSection from "@/components/ServiceAreaSection";
-import { ScrollReveal } from "@/components/motion";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/motion";
 import { getSiteSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -24,9 +24,15 @@ export default async function ContactPage() {
         description={settings.contact_page_intro ?? ""}
       />
 
-      <ScrollReveal as="section" className="section contact-layout">
-        <ContactForm />
-        <ContactSidebar />
+      <ScrollReveal as="section" className="section">
+        <StaggerContainer className="contact-layout">
+          <StaggerItem>
+            <ContactForm />
+          </StaggerItem>
+          <StaggerItem>
+            <ContactSidebar />
+          </StaggerItem>
+        </StaggerContainer>
       </ScrollReveal>
 
       <ServiceAreaSection compact />

@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import type { GalleryItem } from "@/lib/types";
 import SiteImage from "@/components/SiteImage";
 import MotionButton from "@/components/motion/MotionButton";
+import MotionChip from "@/components/motion/MotionChip";
 import { StaggerContainer, StaggerItem } from "@/components/motion/Stagger";
 import {
   GalleryGridSkeleton,
   LoadingPulse,
 } from "@/components/motion/LoadingSkeleton";
+import { lightboxVariants } from "@/lib/motion/variants";
 import { DURATION, EASE } from "@/lib/motion/tokens";
 
 export default function GalleryView() {
@@ -62,30 +64,21 @@ export default function GalleryView() {
   }
 
   if (error) {
-    return <p className="muted">Gallery could not be loaded.</p>;
+    return <p className="empty-state muted">Gallery could not be loaded.</p>;
   }
-
-  const FilterButton = reduced ? "button" : motion.button;
 
   return (
     <>
       <div className="gallery-filter">
         {categories.map((cat) => (
-          <FilterButton
+          <MotionChip
             key={cat}
-            type="button"
-            className={cat === active ? "active" : ""}
+            active={cat === active}
+            className="gallery-filter-chip"
             onClick={() => setActive(cat!)}
-            {...(!reduced
-              ? {
-                  whileHover: { y: -2, scale: 1.03 },
-                  whileTap: { scale: 0.97 },
-                  transition: { duration: DURATION.fast, ease: EASE },
-                }
-              : {})}
           >
             {cat}
-          </FilterButton>
+          </MotionChip>
         ))}
       </div>
       <StaggerContainer className="gallery-grid" key={active}>
@@ -118,8 +111,9 @@ export default function GalleryView() {
                 type="button"
                 onClick={() => setLightbox(item)}
                 whileHover={{
-                  y: -8,
-                  boxShadow: "0 28px 50px rgba(14, 40, 29, 0.16)",
+                  y: -10,
+                  boxShadow:
+                    "0 24px 52px rgba(14, 40, 29, 0.18), 0 0 0 1px rgba(31, 83, 63, 0.08)",
                 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: DURATION.fast, ease: EASE }}
@@ -144,28 +138,38 @@ export default function GalleryView() {
         ))}
       </StaggerContainer>
 
-      {lightbox ? (
-        <dialog className="lightbox" open onClose={() => setLightbox(null)}>
-          <MotionButton
-            className="lightbox-close"
-            aria-label="Close image"
-            type="button"
-            onClick={() => setLightbox(null)}
-          >
-            ×
-          </MotionButton>
-          <SiteImage
-            src={lightbox.image_url}
-            alt={lightbox.alt_text || lightbox.title}
-            className="lightbox-image"
-            width={900}
-            height={675}
-            sizes="(max-width: 900px) 100vw, 900px"
-          />
-          <h2>{lightbox.title}</h2>
-          <p>{lightbox.caption}</p>
-        </dialog>
-      ) : null}
+      <AnimatePresence>
+        {lightbox ? (
+          <dialog className="lightbox" open onClose={() => setLightbox(null)}>
+            <motion.div
+              className="lightbox-inner"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={reduced ? undefined : lightboxVariants}
+            >
+              <MotionButton
+                className="lightbox-close"
+                aria-label="Close image"
+                type="button"
+                onClick={() => setLightbox(null)}
+              >
+                ×
+              </MotionButton>
+              <SiteImage
+                src={lightbox.image_url}
+                alt={lightbox.alt_text || lightbox.title}
+                className="lightbox-image"
+                width={900}
+                height={675}
+                sizes="(max-width: 900px) 100vw, 900px"
+              />
+              <h2>{lightbox.title}</h2>
+              <p>{lightbox.caption}</p>
+            </motion.div>
+          </dialog>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }

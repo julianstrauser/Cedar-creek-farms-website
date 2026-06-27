@@ -2,7 +2,12 @@
 
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { DURATION, EASE } from "@/lib/motion/tokens";
+import {
+  heroActionsVariants,
+  heroContainerVariants,
+  heroEyebrowVariants,
+  heroItemVariants,
+} from "@/lib/motion/variants";
 
 export default function PageHero({
   eyebrow,
@@ -22,7 +27,8 @@ export default function PageHero({
   if (reduced) {
     return (
       <section className={className}>
-        <p className="eyebrow">{eyebrow}</p>
+        <div className="page-hero-ambient" aria-hidden />
+        <p className="eyebrow eyebrow-badge">{eyebrow}</p>
         <h1>{title}</h1>
         <p>{description}</p>
         {children}
@@ -32,37 +38,23 @@ export default function PageHero({
 
   return (
     <section className={className}>
-      <motion.p
-        className="eyebrow"
-        initial={{ opacity: 0, y: 32 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: DURATION.slow, ease: EASE, delay: 0.05 }}
+      <div className="page-hero-ambient" aria-hidden />
+      <motion.div
+        variants={heroContainerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        {eyebrow}
-      </motion.p>
-      <motion.h1
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.65, ease: EASE, delay: 0.12 }}
-      >
-        {title}
-      </motion.h1>
-      <motion.p
-        initial={{ opacity: 0, y: 36 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: DURATION.slow, ease: EASE, delay: 0.22 }}
-      >
-        {description}
-      </motion.p>
-      {children ? (
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: DURATION.slow, ease: EASE, delay: 0.32 }}
-        >
-          {children}
-        </motion.div>
-      ) : null}
+        <motion.p className="eyebrow eyebrow-badge" variants={heroEyebrowVariants}>
+          {eyebrow}
+        </motion.p>
+        <motion.h1 variants={heroItemVariants}>{title}</motion.h1>
+        <motion.p variants={heroItemVariants}>{description}</motion.p>
+        {children ? (
+          <motion.div className="page-hero-actions" variants={heroActionsVariants}>
+            {children}
+          </motion.div>
+        ) : null}
+      </motion.div>
     </section>
   );
 }

@@ -9,3 +9,4 @@ build/
 out/
 supabase/.temp/
 .vercel
+.env*

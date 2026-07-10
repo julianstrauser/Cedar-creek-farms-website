@@ -533,7 +533,8 @@ code {
 .quote-card h2,
 .contact-card h2,
 .inquiry-box h2,
-.gallery-card h3 {
+.gallery-card h3,
+.quote-card h3 {
   margin: 0 0 0.45rem;
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -1709,6 +1710,14 @@ textarea { resize: vertical; }
   .not-found-headline {
     font-size: clamp(1.85rem, 8vw, 2.6rem);
   }
+}
+
+.planting-process-promo .button {
+  margin-top: 1.25rem;
+}
+
+.planting-process-promo-card h3 {
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
 }
 
 /* ——— Tree Installation Scrollytelling ——— */

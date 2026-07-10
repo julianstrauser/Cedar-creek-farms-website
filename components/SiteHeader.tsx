@@ -18,6 +18,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/inventory", label: "Tree Availability" },
   { href: "/services", label: "Transplanting" },
+  { href: "/tree-installation", label: "Our Planting Process" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
 ];

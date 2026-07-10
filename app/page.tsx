@@ -95,6 +95,28 @@ export default function HomePage() {
         </StaggerContainer>
       </ScrollReveal>
 
+      <ScrollReveal as="section" className="section split-section reverse planting-process-promo">
+        <MotionCard className="quote-card large planting-process-promo-card">
+          <p className="eyebrow">10-step process</p>
+          <h3>Selection, transport, planting, and establishment</h3>
+          <p>
+            Scroll through each stage of a professional install—from farm field
+            measurements to long-term root care.
+          </p>
+        </MotionCard>
+        <div>
+          <p className="eyebrow">See How We Plant</p>
+          <h2>From Our Farm to Your Property</h2>
+          <p>
+            Follow the complete Cedar Creek Farms process—from selecting the right
+            tree to planting, watering, and establishing healthy roots.
+          </p>
+          <MotionButton className="button secondary" href="/tree-installation">
+            Explore Our Planting Process
+          </MotionButton>
+        </div>
+      </ScrollReveal>
+
       <ScrollReveal as="section" className="section band">
         <div>
           <p className="eyebrow">Featured availability</p>

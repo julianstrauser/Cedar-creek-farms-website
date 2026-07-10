@@ -72,6 +72,9 @@ export default function ServicesPage() {
             </MotionCard>
           </StaggerItem>
         </StaggerContainer>
+        <MotionButton href="/tree-installation" className="text-link motion-text-link">
+          See Our Full Planting Process →
+        </MotionButton>
       </ScrollReveal>
 
       <ScrollReveal as="section" className="section split-section reverse">

@@ -1,20 +1,22 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { EASE } from "@/lib/motion/tokens";
+import { motion, type MotionValue, useReducedMotion, useTransform } from "framer-motion";
 import { INSTALLATION_STAGE_COUNT } from "@/lib/tree-installation/stages";
 
 type InstallationProgressProps = {
   activeStep: number;
+  progress: MotionValue<number>;
   className?: string;
 };
 
 export default function InstallationProgress({
   activeStep,
+  progress,
   className,
 }: InstallationProgressProps) {
   const reduced = useReducedMotion();
-  const progress = ((activeStep + 1) / INSTALLATION_STAGE_COUNT) * 100;
+  const fillFromStep = ((activeStep + 1) / INSTALLATION_STAGE_COUNT) * 100;
+  const fillHeight = useTransform(progress, (v) => `${Math.max(0, Math.min(1, v)) * 100}%`);
 
   return (
     <nav
@@ -22,12 +24,16 @@ export default function InstallationProgress({
       aria-label="Installation process progress"
     >
       <div className="tree-installation-progress-track" aria-hidden>
-        <motion.div
-          className="tree-installation-progress-fill"
-          initial={false}
-          animate={{ height: reduced ? `${progress}%` : `${progress}%` }}
-          transition={{ duration: reduced ? 0.01 : 0.5, ease: EASE }}
-        />
+        {reduced ? (
+          <motion.div
+            className="tree-installation-progress-fill"
+            initial={false}
+            animate={{ height: `${fillFromStep}%` }}
+            transition={{ duration: 0.01 }}
+          />
+        ) : (
+          <motion.div className="tree-installation-progress-fill" style={{ height: fillHeight }} />
+        )}
       </div>
       <ol className="tree-installation-progress-steps">
         {Array.from({ length: INSTALLATION_STAGE_COUNT }, (_, i) => {

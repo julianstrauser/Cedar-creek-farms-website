@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { pageVariants } from "@/lib/motion/variants";
 
@@ -11,6 +12,8 @@ export default function PageTransition({
   className?: string;
 }) {
   const reduced = useReducedMotion();
+  // Clear transform after enter so position:sticky descendants work
+  const [entered, setEntered] = useState(false);
 
   if (reduced) {
     return <div className={className}>{children}</div>;
@@ -23,6 +26,8 @@ export default function PageTransition({
       animate="visible"
       exit="exit"
       variants={pageVariants}
+      onAnimationComplete={() => setEntered(true)}
+      style={entered ? { transform: "none" } : undefined}
     >
       {children}
     </motion.div>

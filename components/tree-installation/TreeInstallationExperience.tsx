@@ -1,17 +1,12 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
+  useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  useTransform,
 } from "framer-motion";
 import { MotionButton } from "@/components/motion";
 import { DURATION, EASE } from "@/lib/motion/tokens";
@@ -19,35 +14,29 @@ import {
   INSTALLATION_STAGES,
   INSTALLATION_STAGE_COUNT,
 } from "@/lib/tree-installation/stages";
+import { stageIndexFromProgress } from "@/lib/tree-installation/timeline";
 import InstallationProgress from "./InstallationProgress";
 import InstallationStage from "./InstallationStage";
 import TreeInstallationScene from "./TreeInstallationScene";
 
 export default function TreeInstallationExperience() {
   const reduced = useReducedMotion();
-  const scrollyRef = useRef<HTMLDivElement>(null);
+  const installationRef = useRef<HTMLDivElement>(null);
   const [activeStage, setActiveStage] = useState(0);
-  const [blend, setBlend] = useState(0);
   const [pageVisible, setPageVisible] = useState(true);
 
   const { scrollYProgress } = useScroll({
-    target: scrollyRef,
+    target: installationRef,
     offset: ["start start", "end end"],
   });
 
-  const sceneStage = useTransform(scrollYProgress, [0, 1], [0, INSTALLATION_STAGE_COUNT - 0.01]);
+  // Fallback motion value for finale / SSR-safe consumers
+  const finaleProgress = useMotionValue(0.95);
 
-  useMotionValueEvent(sceneStage, "change", (v) => {
-    if (reduced) return;
-    const clamped = Math.max(0, Math.min(INSTALLATION_STAGE_COUNT - 1, v));
-    setActiveStage(Math.floor(clamped));
-    setBlend(clamped - Math.floor(clamped));
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    if (!pageVisible) return;
+    setActiveStage(stageIndexFromProgress(v));
   });
-
-  const handleStageActive = useCallback((index: number) => {
-    setActiveStage(index);
-    setBlend(0);
-  }, []);
 
   useEffect(() => {
     const onVisibility = () => setPageVisible(document.visibilityState === "visible");
@@ -55,11 +44,10 @@ export default function TreeInstallationExperience() {
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  const displayStage = pageVisible ? activeStage : activeStage;
+  const stageLabel = `Step ${activeStage + 1} — ${INSTALLATION_STAGES[activeStage]?.title ?? ""}`;
 
   return (
     <article className="tree-installation">
-      {/* Introduction */}
       <header className="tree-installation-intro">
         <div className="tree-installation-intro-ambient" aria-hidden />
         <motion.div
@@ -105,36 +93,41 @@ export default function TreeInstallationExperience() {
         </motion.div>
       </header>
 
-      {/* Scrollytelling */}
-      <div className="tree-installation-scrolly" ref={scrollyRef}>
-        <div className="tree-installation-scrolly-visual" aria-hidden={!reduced}>
-          <div className="tree-installation-scene-sticky">
-            <TreeInstallationScene
-              stage={displayStage}
-              blend={reduced ? 0 : blend}
-              variant="desktop"
-            />
-            <InstallationProgress activeStep={activeStage} />
+      <div className="tree-installation__scrolly" ref={installationRef}>
+        <div className="tree-installation__visual-col" aria-hidden={false}>
+          <div className="tree-installation__visual">
+            <div className="tree-installation__scene-frame">
+              <TreeInstallationScene
+                progress={scrollYProgress}
+                staticStage={reduced ? activeStage : undefined}
+                variant="desktop"
+                stageLabel={stageLabel}
+              />
+            </div>
+            <InstallationProgress activeStep={activeStage} progress={scrollYProgress} />
           </div>
         </div>
 
-        <div className="tree-installation-scrolly-content">
+        <div className="tree-installation__content-col">
           {INSTALLATION_STAGES.map((stage, index) => (
             <InstallationStage
               key={stage.id}
               data={stage}
               index={index}
-              onActive={handleStageActive}
-              showMobileScene
+              active={activeStage === index}
+              progress={scrollYProgress}
             />
           ))}
         </div>
       </div>
 
-      {/* Finale */}
       <section className="tree-installation-finale">
         <div className="tree-installation-finale-scene" aria-hidden>
-          <TreeInstallationScene stage={9} variant="mobile" />
+          <TreeInstallationScene
+            progress={finaleProgress}
+            staticStage={9}
+            variant="mobile"
+          />
         </div>
         <motion.div
           className="tree-installation-finale-content"
@@ -162,6 +155,11 @@ export default function TreeInstallationExperience() {
           </div>
         </motion.div>
       </section>
+
+      <p className="sr-only">
+        Installation process has {INSTALLATION_STAGE_COUNT} steps. Current step:{" "}
+        {activeStage + 1}.
+      </p>
     </article>
   );
 }
